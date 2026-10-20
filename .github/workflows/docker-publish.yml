@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: mayflower-k8s-runners
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
@@ -19,7 +19,7 @@ jobs:
 
   build:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: mayflower-k8s-runners
     permissions:
       packages: write
       contents: read
