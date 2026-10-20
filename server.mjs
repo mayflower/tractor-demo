@@ -64,7 +64,19 @@ function playgroundRequest(body) {
 
 export function createApp(config = readConfig(), injected) {
   let active = false;
-  const providers = injected || {tractor: invokeTractor, llm: invokeLlm};
+  const base = injected || {tractor: invokeTractor, llm: invokeLlm};
+  // Rolling one-minute window over all comparison-LLM calls (health, playground, runs).
+  const llmCalls = [];
+  const providers = {
+    tractor: base.tractor,
+    llm: args => {
+      const now = Date.now();
+      while (llmCalls.length && now - llmCalls[0] > 60000) llmCalls.shift();
+      if (llmCalls.length >= config.llm.maxPerMinute) return Promise.reject(new ProviderError('RATE_LIMIT', 'LLM-Limit pro Minute erreicht. Bitte kurz warten.', {status: 429}));
+      llmCalls.push(now);
+      return base.llm(args);
+    },
+  };
   const server = http.createServer(async (req, res) => {
     res.setHeader('x-content-type-options', 'nosniff');
     res.setHeader('referrer-policy', 'no-referrer');

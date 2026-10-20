@@ -1,0 +1,29 @@
+{{- if and .Values.ingress.enabled .Values.ingress.public.enabled }}
+# Reachable from the internet: *.data.mayflower.tech uses the public issuer.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "tractordemo.fullname" . }}-public
+  labels:
+    {{- include "tractordemo.labels" . | nindent 4 }}
+  annotations:
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.public.issuer }}
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - host: {{ .Values.ingress.public.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "tractordemo.fullname" . }}
+                port:
+                  number: {{ .Values.service.port }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.public.host }}
+      secretName: {{ .Values.ingress.public.secretName }}
+{{- end }}

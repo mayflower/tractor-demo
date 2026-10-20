@@ -32,11 +32,19 @@ ingress:
   tls:
     enabled: true
     secretName: tractordemo-tls
+  # Second host on the public domain (internet-facing). The comparison LLM is
+  # rate-limited by LLM_MAX_PER_MINUTE because it spends the shared API key.
+  public:
+    enabled: true
+    host: tractordemo.data.mayflower.tech
+    secretName: tractordemo-public-tls
+    issuer: letsencrypt
 
 # Plain configuration, rendered as environment variables.
 config:
   TRACTOR_URL: http://tractor.tractor.svc.cluster.local:8000
   MAX_CONCURRENCY: "1"
+  LLM_MAX_PER_MINUTE: "300"
   COST_CURRENCY: USD
   # LLM comparison, active once the secret below holds LLM_API_KEY.
   # Same comparison model and list prices as josevdemo (per 1M tokens, USD).

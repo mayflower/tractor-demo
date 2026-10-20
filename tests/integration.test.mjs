@@ -114,3 +114,25 @@ test('compare mode scores a strict-schema LLM answer on data only and prices its
     assert.ok(seen.every(s => s.auth === 'Bearer k' && s.strict === true));
   } finally { app.close(); tractor.close(); llm.close(); }
 });
+
+test('the LLM lane is capped per minute while tractor stays unlimited', async () => {
+  const tractor = fakeTractor();
+  let llmCalls = 0;
+  const providers = {
+    tractor: async ({request}) => ({data: {width: 125}, issues: [], timing: {wallMs: 1, stages: {}}, usage: {}}),
+    llm: async () => { llmCalls += 1; return {data: {width: 125}, issues: null, timing: {wallMs: 1, stages: {}}, usage: {}, model: 'fake'}; },
+  };
+  const app = createApp(readConfig({TRACTOR_URL: await start(tractor), LLM_MODEL: 'fake', LLM_API_KEY: 'k', LLM_MAX_PER_MINUTE: '2'}), providers);
+  const base = await start(app);
+  try {
+    const body = lane => JSON.stringify({request: {text: 'Breite: 12,5 cm.', fields: {width: {type: 'quantity', description: 'Breite', unit: 'mm'}}}, lane});
+    const call = lane => fetch(`${base}/api/extract`, {method: 'POST', headers: {'content-type': 'application/json'}, body: body(lane)}).then(r => r.json());
+    assert.equal((await call('llm')).result.ok, true);
+    assert.equal((await call('llm')).result.ok, true);
+    const limited = (await call('llm')).result;
+    assert.equal(limited.ok, false);
+    assert.equal(limited.code, 'RATE_LIMIT');
+    assert.equal(llmCalls, 2);
+    for (let i = 0; i < 5; i += 1) assert.equal((await call('tractor')).result.ok, true);
+  } finally { app.close(); tractor.close(); }
+});
