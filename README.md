@@ -39,7 +39,7 @@ Kern ist die **Geschwindigkeit**: Text rein, typisierte und geprüfte Felder rau
 
 `LLM_MODEL` und `LLM_API_KEY` aktivieren den Vergleich (`/v1/chat/completions`, `LLM_BASE_URL` standardmäßig OpenAI). Kosten: LLM aus gemeldeten Token × Listenpreis (`LLM_PRICE_*`), tractor aus Laufzeit × `TRACTOR_COST_PER_HOUR`. Leere Werte bedeuten „nicht konfiguriert“, nie „kostenlos“.
 
-tractor arbeitet mit einem Worker pro Prozess. `MAX_CONCURRENCY=1` vermeidet Wartezeit-Fehler. Gemessen werden CPU-HTTP-Laufzeiten; auf einem ausgelasteten oder swappenden Rechner sind sie nicht aussagekräftig.
+tractor arbeitet mit einem Worker pro Prozess. `MAX_CONCURRENCY=1` vermeidet Wartezeit-Fehler. Gemessen wird die HTTP-Laufzeit des konfigurierten tractor-Servers (CPU oder GPU); auf einem ausgelasteten oder swappenden Rechner sind sie nicht aussagekräftig.
 
 ## Tests und Messung
 
