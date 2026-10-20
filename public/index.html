@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="tractor extrahiert typisierte Felder aus Texten und normalisiert sie deterministisch.">
+  <title>tractor · Extraction Lab</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%23227a52'/%3E%3Cpath d='M9 24h22M13 24v-8h9l4 8M15 28a2 2 0 1 0 0 .1M27 28a2 2 0 1 0 0 .1' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Zum Demo-Bereich</a>
+  <header class="masthead">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><strong>tractor</strong><span class="brand-sub">Text rein, saubere Felder raus</span></div>
+    <span id="connection" class="pill" role="status">Verbindung …</span>
+  </header>
+  <main id="main">
+    <nav class="tabs" id="tabs" aria-label="Demos"></nav>
+    <div class="chips" id="chips" aria-label="Beispiele"></div>
+    <section class="race" id="race" aria-label="Geschwindigkeit" aria-live="polite"></section>
+    <div class="stage">
+      <section class="doc" aria-labelledby="docTitle">
+        <h2 id="docTitle">Dokument</h2>
+        <textarea id="text" rows="7" spellcheck="false" aria-label="Quelltext"></textarea>
+        <details class="schema"><summary>Felder und Typen</summary><textarea id="request" rows="10" spellcheck="false" class="mono" aria-label="Anfrage als JSON"></textarea></details>
+        <div class="doc-actions">
+          <button id="run" class="button button-primary" type="button">Extrahieren</button>
+          <label class="check"><input id="compare" type="checkbox"><span>gegen LLM antreten</span></label>
+          <span id="edited" class="hint" hidden>Eigene Fassung, kein Sollwert</span>
+        </div>
+        <div id="error" class="banner" role="alert" hidden></div>
+      </section>
+      <section class="result" aria-labelledby="resultTitle" aria-live="polite">
+        <h2 id="resultTitle">Ergebnis</h2>
+        <div id="result" class="fields"><p class="placeholder">Wähle ein Beispiel oder tippe einen eigenen Text.</p></div>
+      </section>
+    </div>
+    <section class="speedrun" aria-label="Speed-Run">
+      <div class="speedrun-head">
+        <div><h2>Speed-Run</h2><p class="hint2">Alle 27 Dokumente aus allen Demos, nacheinander verarbeitet.</p></div>
+        <div class="speedrun-actions"><button id="measure" class="button button-primary" type="button">Speed-Run starten</button><button id="stop" class="button" type="button" hidden>Stoppen</button></div>
+      </div>
+      <div id="runLanes" class="run-lanes"></div>
+      <div id="score" class="score"></div>
+    </section>
+  </main>
+</body>
+</html>

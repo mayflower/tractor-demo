@@ -1,0 +1,98 @@
+# The run lock and the live result stream live in process memory.
+replicaCount: 1
+
+image:
+  repository: ghcr.io/mayflower/tractor-demo
+  # Defaults to .Chart.AppVersion. The Argo CD Application pins a sha- tag
+  # published by .github/workflows/docker-publish.yml.
+  tag: ""
+  pullPolicy: ""
+
+global:
+  imagePullPolicy: IfNotPresent
+
+# Needed while ghcr.io/mayflower/tractor-demo is a private package.
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: true
+  className: traefik
+  host: tractordemo.data.mayflower.zone
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-intern-dns
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+  tls:
+    enabled: true
+    secretName: tractordemo-tls
+
+# Plain configuration, rendered as environment variables.
+config:
+  TRACTOR_URL: http://tractor.tractor.svc.cluster.local:8000
+  MAX_CONCURRENCY: "1"
+  COST_CURRENCY: USD
+  # LLM comparison, active once the secret below holds LLM_API_KEY.
+  # Same comparison model and list prices as josevdemo (per 1M tokens, USD).
+  LLM_BASE_URL: https://api.openai.com
+  LLM_MODEL: gpt-6-luna
+  LLM_PRICE_INPUT_PER_MTOK: "0.10"
+  LLM_PRICE_OUTPUT_PER_MTOK: "0.50"
+
+# Secret with LLM_API_KEY, created by the tractordemo-bootstrap Application
+# (SOPS), not by this chart. The reference is optional: without the secret the
+# demo runs tractor-only.
+secretName: tractordemo-secrets
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+# GET /api/config answers without calling any model.
+startupProbe:
+  httpGet: {path: /api/config, port: http}
+  periodSeconds: 2
+  timeoutSeconds: 3
+  failureThreshold: 30
+readinessProbe:
+  httpGet: {path: /api/config, port: http}
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 6
+livenessProbe:
+  httpGet: {path: /api/config, port: http}
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+podLabels: {}
+podAnnotations: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

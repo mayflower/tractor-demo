@@ -1,0 +1,6 @@
+apiVersion: v2
+name: tractordemo
+description: tractor Extraction Lab, a browser demo for the System One Extraction Model
+type: application
+version: 0.1.0
+appVersion: "latest"
