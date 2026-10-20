@@ -1,0 +1,4716 @@
+{
+ "invoice": [
+  {
+   "id": "inv-1",
+   "title": "Vollständige Rechnung",
+   "text": "Rechnung RE-2026-0412 vom 14.03.2026. Zahlbar bis 28.03.2026. Gesamtbetrag brutto: 2.380,00 EUR. Überweisung auf IBAN DE89 3704 0044 0532 0130 00. USt-IdNr. DE136695976.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "invoice_no": {
+      "type": "identifier",
+      "description": "Rechnungsnummer"
+     },
+     "invoice_date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "due_date": {
+      "type": "date",
+      "description": "Fälligkeitsdatum (zahlbar bis)",
+      "date_order": "DMY"
+     },
+     "gross_amount": {
+      "type": "money",
+      "description": "Rechnungsbetrag brutto",
+      "currency": "EUR"
+     },
+     "iban": {
+      "type": "iban",
+      "description": "IBAN des Rechnungsstellers"
+     },
+     "vat_id": {
+      "type": "identifier",
+      "description": "USt-IdNr. des Rechnungsstellers",
+      "format": "vat",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "invoice_no": "RE-2026-0412",
+     "invoice_date": "2026-03-14",
+     "due_date": "2026-03-28",
+     "gross_amount": 2380,
+     "iban": "DE89370400440532013000",
+     "vat_id": "136695976"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-2",
+   "title": "Englische Rechnung in US-Dollar",
+   "text": "Invoice INV-77120 dated 2026-04-02. Total due: US$ 1,250.00. Payment due: April 30, 2026. Remit to DE02 1203 0000 0000 2020 51.",
+   "request": {
+    "locale": "en-US",
+    "fields": {
+     "invoice_no": {
+      "type": "identifier",
+      "description": "Invoice number"
+     },
+     "invoice_date": {
+      "type": "date",
+      "description": "Invoice date"
+     },
+     "due_date": {
+      "type": "date",
+      "description": "Payment due date"
+     },
+     "gross_amount": {
+      "type": "money",
+      "description": "Total due",
+      "currency": "USD",
+      "locale": "en-US"
+     },
+     "iban": {
+      "type": "iban",
+      "description": "IBAN of the issuer"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "invoice_no": "INV-77120",
+     "invoice_date": "2026-04-02",
+     "due_date": "2026-04-30",
+     "gross_amount": 1250,
+     "iban": "DE02120300000000202051"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-6",
+   "title": "Britische Rechnung in Pfund",
+   "text": "Invoice 88-2041 issued 5 June 2026. Amount due: £ 2,450.00, payable by 19 June 2026.",
+   "request": {
+    "locale": "en-GB",
+    "fields": {
+     "no": {
+      "type": "identifier",
+      "description": "Invoice number"
+     },
+     "issued": {
+      "type": "date",
+      "description": "Issue date"
+     },
+     "amount": {
+      "type": "money",
+      "description": "Amount due",
+      "currency": "GBP",
+      "locale": "en-GB"
+     },
+     "due": {
+      "type": "date",
+      "description": "Payment deadline"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "no": "88-2041",
+     "issued": "2026-06-05",
+     "amount": 2450,
+     "due": "2026-06-19"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-7",
+   "title": "Betrag mit Eurozeichen",
+   "text": "Rechnungsbetrag: 99,90 € inkl. MwSt.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "amount": {
+      "type": "money",
+      "description": "Rechnungsbetrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "amount": 99.9
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-8",
+   "title": "Betrag mit Währungskürzel davor",
+   "text": "Gesamt: EUR 1.234,50 — Zahlungsziel 14 Tage.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "amount": {
+      "type": "money",
+      "description": "Gesamtbetrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "amount": 1234.5
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-11",
+   "title": "USt-IdNr. des Lieferanten",
+   "text": "Lieferant: Nordlicht Systems GmbH, USt-IdNr. DE736343332, Steuernummer 21/815/08150.",
+   "request": {
+    "fields": {
+     "vat": {
+      "type": "identifier",
+      "description": "USt-IdNr. des Lieferanten",
+      "format": "vat",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "vat": "736343332"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-12",
+   "title": "Skonto in Prozent",
+   "text": "Bei Zahlung innerhalb von 10 Tagen gewähren wir 2 % Skonto auf den Rechnungsbetrag.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "discount": {
+      "type": "percent",
+      "description": "Skontosatz",
+      "locale": "de-DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "discount": 2
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-13",
+   "title": "Schweizer Franken",
+   "text": "Rechnung 2026-31 vom 12.02.2026: Total CHF 480,00 inkl. MwSt.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "no": {
+      "type": "identifier",
+      "description": "Rechnungsnummer"
+     },
+     "date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "total": {
+      "type": "money",
+      "description": "Total",
+      "currency": "CHF"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "no": "2026-31",
+     "date": "2026-02-12",
+     "total": 480
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-14",
+   "title": "Australische Dollar",
+   "text": "Invoice AU-2209 dated 2026-08-14. Total: A$ 300.00.",
+   "request": {
+    "locale": "en-US",
+    "fields": {
+     "no": {
+      "type": "identifier",
+      "description": "Invoice number"
+     },
+     "date": {
+      "type": "date",
+      "description": "Invoice date"
+     },
+     "total": {
+      "type": "money",
+      "description": "Total",
+      "currency": "AUD",
+      "locale": "en-US"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "no": "AU-2209",
+     "date": "2026-08-14",
+     "total": 300
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-16",
+   "title": "Zahlung per IBAN (Frankreich)",
+   "text": "Zahlungen bitte auf das Konto der Spedition: IBAN FR14 2004 1010 0505 0001 3M02 606.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN der Spedition"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": "FR1420041010050500013M02606"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-18",
+   "title": "Zahlung per IBAN (Österreich)",
+   "text": "Bitte überweisen Sie auf AT61 1904 3002 3457 3201.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": "AT611904300234573201"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-19",
+   "title": "Zahlung per IBAN (Schweiz)",
+   "text": "Konto: CH93 0076 2011 6238 5295 7.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": "CH9300762011623852957"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-20",
+   "title": "Zahlung per IBAN (Deutschland)",
+   "text": "Zahlungsempfänger: Südwind AG, IBAN DE44 5001 0517 5407 3249 31.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN des Zahlungsempfängers"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": "DE44500105175407324931"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-22",
+   "title": "Euro-Rechnung in englischem Format",
+   "text": "Invoice 4410 dated 2026-09-15. Total: 3,200.00 EUR.",
+   "request": {
+    "locale": "en-US",
+    "fields": {
+     "no": {
+      "type": "identifier",
+      "description": "Invoice number"
+     },
+     "date": {
+      "type": "date",
+      "description": "Invoice date"
+     },
+     "total": {
+      "type": "money",
+      "description": "Total",
+      "currency": "EUR",
+      "locale": "en-US"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "no": "4410",
+     "date": "2026-09-15",
+     "total": 3200
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-23",
+   "title": "Schrägstrich in der Nummer",
+   "text": "Rechnungsnummer: 2026/0188; Rechnungsdatum: 18.02.2026; Fälligkeit: 04.03.2026.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "no": {
+      "type": "identifier",
+      "description": "Rechnungsnummer"
+     },
+     "date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "due": {
+      "type": "date",
+      "description": "Fälligkeitsdatum",
+      "date_order": "DMY"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "no": "2026/0188",
+     "date": "2026-02-18",
+     "due": "2026-03-04"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-25",
+   "title": "USt-IdNr. Variante 1",
+   "text": "Wir sind unter der USt-IdNr. DE114139017 registriert.",
+   "request": {
+    "fields": {
+     "vat": {
+      "type": "identifier",
+      "description": "USt-IdNr.",
+      "format": "vat",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "vat": "114139017"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-26",
+   "title": "USt-IdNr. Variante 2",
+   "text": "Umsatzsteuer-Identifikationsnummer: DE516191547.",
+   "request": {
+    "fields": {
+     "vat": {
+      "type": "identifier",
+      "description": "Umsatzsteuer-Identifikationsnummer",
+      "format": "vat",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "vat": "516191547"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-28",
+   "title": "IBAN Variante 1",
+   "text": "Bankverbindung: IBAN DE81 7007 0010 0009 8765 43.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": "DE81700700100009876543"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-29",
+   "title": "IBAN Variante 2",
+   "text": "Bitte zahlen Sie auf das Konto DE95 3704 0044 0111 2223 33.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN des Empfängers"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": "DE95370400440111222333"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-30",
+   "title": "IBAN Variante 3",
+   "text": "Zahlung an: IBAN DE41 2004 1155 0420 0088 99.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": "DE41200411550420008899"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-31",
+   "title": "IBAN Italien",
+   "text": "Coordinate bancarie: IBAN IT60 X054 2811 1010 0000 0123 456.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": "IT60X0542811101000000123456"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-35",
+   "title": "Kleiner Betrag",
+   "text": "Porto: 0,99 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "amount": {
+      "type": "money",
+      "description": "Portokosten",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "amount": 0.99
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-36",
+   "title": "ISO-Datum",
+   "text": "Rechnungsdatum 2026-11-30, fällig am 2026-12-14.",
+   "request": {
+    "fields": {
+     "date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "YMD"
+     },
+     "due": {
+      "type": "date",
+      "description": "Fälligkeitsdatum",
+      "date_order": "YMD"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "date": "2026-11-30",
+     "due": "2026-12-14"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-37",
+   "title": "Dezember und Januar",
+   "text": "Rechnung vom 15. Dezember 2026, zahlbar bis 15. Januar 2027.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "due": {
+      "type": "date",
+      "description": "Zahlungsfrist",
+      "date_order": "DMY"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "date": "2026-12-15",
+     "due": "2027-01-15"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-38",
+   "title": "Rechnung mit Steuer in Prozent",
+   "text": "Der Umsatzsteuersatz beträgt 19 %.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "vat_rate": {
+      "type": "percent",
+      "description": "Umsatzsteuersatz",
+      "locale": "de-DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "vat_rate": 19
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-39",
+   "title": "Kanadische Dollar",
+   "text": "Total due CA$ 40.00 including tax.",
+   "request": {
+    "locale": "en-US",
+    "fields": {
+     "total": {
+      "type": "money",
+      "description": "Total due",
+      "currency": "CAD",
+      "locale": "en-US"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "total": 40
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "inv-40",
+   "title": "Rechnung Amtsdeutsch",
+   "text": "Zu der Rechnung mit der Nummer 2026-1177 vom 22.06.2026 ist ein Betrag von 640,00 EUR zu zahlen.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "no": {
+      "type": "identifier",
+      "description": "Rechnungsnummer"
+     },
+     "date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "amount": {
+      "type": "money",
+      "description": "zu zahlender Betrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "no": "2026-1177",
+     "date": "2026-06-22",
+     "amount": 640
+    },
+    "issues": []
+   }
+  }
+ ],
+ "units": [
+  {
+   "id": "unit-1",
+   "title": "Rover: kg, cm, miles",
+   "text": "Der Rover-X wiegt 12,5 kg, ist 62 cm breit und schafft 10 miles pro Ladung.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "weight": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     },
+     "width": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "mm"
+     },
+     "range": {
+      "type": "quantity",
+      "description": "Reichweite pro Ladung",
+      "unit": "km"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "weight": 12.5,
+     "width": 620,
+     "range": 16.09344
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-2",
+   "title": "Zoll und Fahrenheit",
+   "text": "Die Kaffeemaschine ist 9 inches hoch und hält 212 °F aus.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "height": {
+      "type": "quantity",
+      "description": "Höhe",
+      "unit": "mm"
+     },
+     "temperature": {
+      "type": "quantity",
+      "description": "maximale Temperatur",
+      "unit": "degC"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "height": 228.6,
+     "temperature": 100
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-3",
+   "title": "Pfund und Celsius",
+   "text": "Maximale Betriebstemperatur: 85 °C. Gewicht 50 lb.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "temperature": {
+      "type": "quantity",
+      "description": "maximale Temperatur",
+      "unit": "degF"
+     },
+     "weight": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "temperature": 185,
+     "weight": 22.6796185
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-4",
+   "title": "Kilometer in Meilen",
+   "text": "Der Tank fasst 45 Liter, die Reichweite beträgt 650 km.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "volume": {
+      "type": "quantity",
+      "description": "Tankvolumen",
+      "unit": "L"
+     },
+     "range": {
+      "type": "quantity",
+      "description": "Reichweite",
+      "unit": "mile"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "volume": 45,
+     "range": 403.89127495426703
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-5",
+   "title": "Koffer in Pfund",
+   "text": "Der Koffer wiegt 23 kg und misst 75 cm in der Höhe.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "weight": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "lb"
+     },
+     "height": {
+      "type": "quantity",
+      "description": "Höhe",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "weight": 50.70632030252184,
+     "height": 750
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-6",
+   "title": "Meter und Zentimeter",
+   "text": "Die Platte ist 2,5 m lang und 120 cm breit.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "length": {
+      "type": "quantity",
+      "description": "Länge",
+      "unit": "mm"
+     },
+     "width": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "length": 2500,
+     "width": 1200
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-7",
+   "title": "Lagertemperatur",
+   "text": "Die Temperatur im Lager beträgt 18 °C.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "t": {
+      "type": "quantity",
+      "description": "Lagertemperatur",
+      "unit": "degF"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "t": 64.4
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-8",
+   "title": "Tank in Millilitern",
+   "text": "Der Tank fasst 55 Liter.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "v": {
+      "type": "quantity",
+      "description": "Tankvolumen",
+      "unit": "mL"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "v": 55000
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-9",
+   "title": "Kubikmeter in Liter",
+   "text": "Der Behälter hat ein Fassungsvermögen von 2,5 m³.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "v": {
+      "type": "quantity",
+      "description": "Fassungsvermögen",
+      "unit": "L"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "v": 2500
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-10",
+   "title": "Fläche",
+   "text": "Die Lagerhalle hat eine Fläche von 85 m².",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "a": {
+      "type": "quantity",
+      "description": "Fläche",
+      "unit": "cm2"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "a": 850000
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-11",
+   "title": "Geschwindigkeit in m/s",
+   "text": "Die Höchstgeschwindigkeit beträgt 120 km/h.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "v": {
+      "type": "quantity",
+      "description": "Höchstgeschwindigkeit",
+      "unit": "m/s"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "v": 33.333333333333336
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-12",
+   "title": "Geschwindigkeit in mph",
+   "text": "Der Zug fährt mit 160 km/h.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "v": {
+      "type": "quantity",
+      "description": "Geschwindigkeit",
+      "unit": "mph"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "v": 99.41939075797343
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-13",
+   "title": "Kabellänge in Fuß",
+   "text": "Das Kabel ist 15 ft lang.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "l": {
+      "type": "quantity",
+      "description": "Kabellänge",
+      "unit": "m"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "l": 4.572
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-14",
+   "title": "Akku in Gramm",
+   "text": "Der Akku wiegt 450 g.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "m": {
+      "type": "quantity",
+      "description": "Gewicht des Akkus",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "m": 0.45
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-15",
+   "title": "Ladezeit in Stunden",
+   "text": "Die Ladezeit beträgt 45 min.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "t": {
+      "type": "quantity",
+      "description": "Ladezeit",
+      "unit": "h"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "t": 0.75
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-16",
+   "title": "Laufzeit in Minuten",
+   "text": "Die Laufzeit liegt bei 2,5 h.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "t": {
+      "type": "quantity",
+      "description": "Laufzeit",
+      "unit": "min"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "t": 150
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-17",
+   "title": "Paket in Kilogramm",
+   "text": "Das Paket wiegt 2 lbs.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "m": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "m": 0.90718474
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-18",
+   "title": "Schraubenlänge",
+   "text": "Schraube M6, Länge 30 mm.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "l": {
+      "type": "quantity",
+      "description": "Schraubenlänge",
+      "unit": "cm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "l": 3
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-19",
+   "title": "Druck in Megapascal",
+   "text": "Der Betriebsdruck liegt bei 250 kPa.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "p": {
+      "type": "quantity",
+      "description": "Betriebsdruck",
+      "unit": "MPa"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "p": 0.25
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-20",
+   "title": "Englische Maße",
+   "text": "The cable is 15.5 ft long and weighs 2.25 lb.",
+   "request": {
+    "locale": "en-US",
+    "fields": {
+     "l": {
+      "type": "quantity",
+      "description": "cable length",
+      "unit": "m"
+     },
+     "m": {
+      "type": "quantity",
+      "description": "cable weight",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "l": 4.7244,
+     "m": 1.0205828325000001
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-21",
+   "title": "Höhe, Breite, Tiefe",
+   "text": "Höhe 1,85 m, Breite 90 cm, Tiefe 450 mm.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "h": {
+      "type": "quantity",
+      "description": "Höhe",
+      "unit": "mm"
+     },
+     "w": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "mm"
+     },
+     "d": {
+      "type": "quantity",
+      "description": "Tiefe",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "h": 1850,
+     "w": 900,
+     "d": 450
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-22",
+   "title": "Gefriertemperatur in Kelvin",
+   "text": "Die Gefriertemperatur im Tiefkühlfach beträgt -18 °C.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "t": {
+      "type": "quantity",
+      "description": "Gefriertemperatur",
+      "unit": "K"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "t": 255.15
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-24",
+   "title": "Streckenlänge",
+   "text": "Die Strecke ist 42,195 km lang.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "l": {
+      "type": "quantity",
+      "description": "Streckenlänge",
+      "unit": "m"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "l": 42195
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-25",
+   "title": "Zoll in Zentimeter",
+   "text": "Der Bildschirm misst 27 Zoll in der Diagonale.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "d": {
+      "type": "quantity",
+      "description": "Bildschirmdiagonale",
+      "unit": "cm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "d": 68.58
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-26",
+   "title": "Regalhöhe",
+   "text": "Das Regal ist 1,8 m hoch.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "h": {
+      "type": "quantity",
+      "description": "Höhe",
+      "unit": "cm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "h": 180
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-27",
+   "title": "Rollengewicht",
+   "text": "Die Papierrolle wiegt 25 kg.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "m": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "g"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "m": 25000
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-28",
+   "title": "Lieferzeit in Stunden",
+   "text": "Die Lieferung dauert 90 min.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "t": {
+      "type": "quantity",
+      "description": "Lieferdauer",
+      "unit": "h"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "t": 1.5
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-29",
+   "title": "Englisch: Gewicht und Länge",
+   "text": "The package weighs 4.5 lb and is 20 inches long.",
+   "request": {
+    "locale": "en-US",
+    "fields": {
+     "m": {
+      "type": "quantity",
+      "description": "package weight",
+      "unit": "kg"
+     },
+     "l": {
+      "type": "quantity",
+      "description": "package length",
+      "unit": "cm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "m": 2.0411656650000003,
+     "l": 50.8
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-30",
+   "title": "Englisch: Meilen",
+   "text": "The trail is 3.2 miles long.",
+   "request": {
+    "locale": "en-US",
+    "fields": {
+     "l": {
+      "type": "quantity",
+      "description": "trail length",
+      "unit": "km"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "l": 5.149900800000001
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-31",
+   "title": "Kilogramm in Gramm",
+   "text": "Der Beutel enthält 0,25 kg Kaffee.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "m": {
+      "type": "quantity",
+      "description": "Füllmenge",
+      "unit": "g"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "m": 250
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-32",
+   "title": "Millimeter in Zoll",
+   "text": "Die Platte ist 508 mm breit.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "w": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "in"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "w": 20
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-33",
+   "title": "Hubraum",
+   "text": "Der Tank hat ein Volumen von 0,5 m³.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "v": {
+      "type": "quantity",
+      "description": "Volumen",
+      "unit": "L"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "v": 500
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-34",
+   "title": "Temperatur Raum",
+   "text": "Die Raumtemperatur beträgt 21 °C.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "t": {
+      "type": "quantity",
+      "description": "Raumtemperatur",
+      "unit": "degC"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "t": 21
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-36",
+   "title": "Dicke in Mikrometern",
+   "text": "Die Folie ist 50 µm dick.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "d": {
+      "type": "quantity",
+      "description": "Foliendicke",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "d": 0.05
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-37",
+   "title": "Mikrogramm",
+   "text": "Die Tablette enthält 500 µg Wirkstoff.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "m": {
+      "type": "quantity",
+      "description": "Wirkstoffmenge",
+      "unit": "mg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "m": 0.5
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-38",
+   "title": "Fahrzeugdaten",
+   "text": "Der Wagen ist 4,2 m lang, 1,8 m breit und wiegt 1.450 kg.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "l": {
+      "type": "quantity",
+      "description": "Länge",
+      "unit": "mm"
+     },
+     "w": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "mm"
+     },
+     "m": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "l": 4200,
+     "w": 1800,
+     "m": 1450
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-39",
+   "title": "Packmaß",
+   "text": "Packmaß: 40 cm x 30 cm, Gewicht 3,5 kg.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "m": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "g"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "m": 3500
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "unit-40",
+   "title": "Druck in Pascal",
+   "text": "Der Prüfdruck beträgt 0,4 MPa.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "p": {
+      "type": "quantity",
+      "description": "Prüfdruck",
+      "unit": "kPa"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "p": 400
+    },
+    "issues": []
+   }
+  }
+ ],
+ "contacts": [
+  {
+   "id": "con-1",
+   "title": "Ansprechpartnerin",
+   "text": "Ansprechpartnerin ist Dr. Anna Weber von der Nordlicht Systems GmbH, erreichbar unter Anna.Weber@Nordlicht-Systems.de oder +49 89 636 48018.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "contact": {
+      "type": "person",
+      "description": "Ansprechpartner"
+     },
+     "company": {
+      "type": "organization",
+      "description": "Unternehmen"
+     },
+     "email": {
+      "type": "email",
+      "description": "E-Mail-Adresse"
+     },
+     "phone": {
+      "type": "phone",
+      "description": "Telefonnummer",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "contact": "Dr. Anna Weber",
+     "company": "Nordlicht Systems GmbH",
+     "email": "Anna.Weber@nordlicht-systems.de",
+     "phone": "+498963648018"
+    },
+    "issues": []
+   },
+   "accept": {
+    "contact": [
+     "Anna Weber"
+    ]
+   }
+  },
+  {
+   "id": "con-2",
+   "title": "Sitz mit Adresse und Telefon",
+   "text": "Sitz der Gesellschaft: Hauptstraße 5, 01067 Dresden. Telefon 0351 987654.",
+   "request": {
+    "fields": {
+     "address": {
+      "type": "address",
+      "description": "Firmenadresse"
+     },
+     "postcode": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "DE"
+     },
+     "phone": {
+      "type": "phone",
+      "description": "Telefon",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "address": "Hauptstraße 5, 01067 Dresden",
+     "postcode": "01067",
+     "phone": "+49351987654"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-4",
+   "title": "Web und Mobilnummer",
+   "text": "Besuchen Sie WWW.Beispiel-Firma.DE/Kontakt oder rufen Sie uns an unter 0176 12345678.",
+   "request": {
+    "fields": {
+     "url": {
+      "type": "url",
+      "description": "Webseite"
+     },
+     "phone": {
+      "type": "phone",
+      "description": "Mobilnummer",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "url": "www.beispiel-firma.de/Kontakt",
+     "phone": "+4917612345678"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-5",
+   "title": "Österreichische Nummer",
+   "text": "Ansprechpartner: Herr Jonas Krüger, Tel. +43 1 5877966.",
+   "request": {
+    "fields": {
+     "person": {
+      "type": "person",
+      "description": "Ansprechpartner"
+     },
+     "phone": {
+      "type": "phone",
+      "description": "Telefonnummer"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "person": "Jonas Krüger",
+     "phone": "+4315877966"
+    },
+    "issues": []
+   },
+   "accept": {
+    "person": [
+     "Herr Jonas Krüger"
+    ]
+   }
+  },
+  {
+   "id": "con-6",
+   "title": "Kanzlei mit Titeln",
+   "text": "Kontakt: Prof. Dr. Martin Berger, Berger & Partner Rechtsanwälte, martin.berger@berger-partner.de, Tel. +49 30 2345678.",
+   "request": {
+    "fields": {
+     "person": {
+      "type": "person",
+      "description": "Ansprechpartner"
+     },
+     "firm": {
+      "type": "organization",
+      "description": "Kanzlei"
+     },
+     "email": {
+      "type": "email",
+      "description": "E-Mail"
+     },
+     "phone": {
+      "type": "phone",
+      "description": "Telefon",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "person": "Prof. Dr. Martin Berger",
+     "firm": "Berger & Partner Rechtsanwälte",
+     "email": "martin.berger@berger-partner.de",
+     "phone": "+49302345678"
+    },
+    "issues": []
+   },
+   "accept": {
+    "person": [
+     "Martin Berger"
+    ],
+    "firm": [
+     "Berger & Partner"
+    ]
+   }
+  },
+  {
+   "id": "con-8",
+   "title": "Mobilfunknummer",
+   "text": "Erreichbar unter 0151 23456789.",
+   "request": {
+    "fields": {
+     "phone": {
+      "type": "phone",
+      "description": "Mobilnummer",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "phone": "+4915123456789"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-9",
+   "title": "Schweizer Telefonnummer",
+   "text": "Zentrale: +41 44 668 18 00.",
+   "request": {
+    "fields": {
+     "phone": {
+      "type": "phone",
+      "description": "Telefonnummer der Zentrale"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "phone": "+41446681800"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-10",
+   "title": "Britische Telefonnummer",
+   "text": "Call our London office on +44 20 7946 0958.",
+   "request": {
+    "fields": {
+     "phone": {
+      "type": "phone",
+      "description": "London office phone"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "phone": "+442079460958"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-11",
+   "title": "E-Mail in Großbuchstaben",
+   "text": "Anfragen bitte an VERTRIEB@Beispiel-AG.de.",
+   "request": {
+    "fields": {
+     "email": {
+      "type": "email",
+      "description": "E-Mail für Anfragen"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "email": "VERTRIEB@beispiel-ag.de"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-13",
+   "title": "Postleitzahl mit führender Null",
+   "text": "Die Postleitzahl lautet 01067.",
+   "request": {
+    "fields": {
+     "postcode": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "postcode": "01067"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-14",
+   "title": "Österreichische Postleitzahl",
+   "text": "Büro Wien: Ringstraße 1, 1010 Wien.",
+   "request": {
+    "fields": {
+     "postcode": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "AT"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "postcode": "1010"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-16",
+   "title": "Ort der Messe",
+   "text": "Die Messe findet in Hannover statt.",
+   "request": {
+    "fields": {
+     "city": {
+      "type": "place",
+      "description": "Ort der Messe"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "city": "Hannover"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-17",
+   "title": "Firma mit Rechtsform",
+   "text": "Rechnungssteller ist die Nordlicht Systems GmbH & Co. KG.",
+   "request": {
+    "fields": {
+     "company": {
+      "type": "organization",
+      "description": "Rechnungssteller"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "company": "Nordlicht Systems GmbH & Co. KG"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-18",
+   "title": "Geschäftsführer",
+   "text": "Geschäftsführer ist Dipl.-Ing. Thomas Albrecht.",
+   "request": {
+    "fields": {
+     "ceo": {
+      "type": "person",
+      "description": "Geschäftsführer"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "ceo": "Dipl.-Ing. Thomas Albrecht"
+    },
+    "issues": []
+   },
+   "accept": {
+    "ceo": [
+     "Thomas Albrecht"
+    ]
+   }
+  },
+  {
+   "id": "con-21",
+   "title": "Hamburger Nummer",
+   "text": "Telefon: +49 40 1234567.",
+   "request": {
+    "fields": {
+     "phone": {
+      "type": "phone",
+      "description": "Telefon",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "phone": "+49401234567"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-22",
+   "title": "Frankfurter Nummer",
+   "text": "Rufen Sie an unter +49 69 98765432.",
+   "request": {
+    "fields": {
+     "phone": {
+      "type": "phone",
+      "description": "Telefonnummer",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "phone": "+496998765432"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-23",
+   "title": "Kölner Nummer national",
+   "text": "Tel. 0221 556677.",
+   "request": {
+    "fields": {
+     "phone": {
+      "type": "phone",
+      "description": "Telefonnummer",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "phone": "+49221556677"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-24",
+   "title": "Österreichisches Handy",
+   "text": "Mobil: +43 660 1234567.",
+   "request": {
+    "fields": {
+     "phone": {
+      "type": "phone",
+      "description": "Mobilnummer"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "phone": "+436601234567"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-25",
+   "title": "E-Mail einfach",
+   "text": "Schreiben Sie an kontakt@firma.de.",
+   "request": {
+    "fields": {
+     "email": {
+      "type": "email",
+      "description": "E-Mail-Adresse"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "email": "kontakt@firma.de"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-26",
+   "title": "E-Mail mit Punkt",
+   "text": "Max Mustermann: max.mustermann@beispiel.de",
+   "request": {
+    "fields": {
+     "email": {
+      "type": "email",
+      "description": "E-Mail von Max Mustermann"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "email": "max.mustermann@beispiel.de"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-27",
+   "title": "E-Mail mit Großbuchstaben in der Domain",
+   "text": "Kontakt: info@Beispiel.COM",
+   "request": {
+    "fields": {
+     "email": {
+      "type": "email",
+      "description": "Kontakt-E-Mail"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "email": "info@beispiel.com"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-28",
+   "title": "Frau Schmidt",
+   "text": "Ihre Ansprechpartnerin ist Frau Petra Schmidt.",
+   "request": {
+    "fields": {
+     "person": {
+      "type": "person",
+      "description": "Ansprechpartnerin"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "person": "Petra Schmidt"
+    },
+    "issues": []
+   },
+   "accept": {
+    "person": [
+     "Frau Petra Schmidt"
+    ]
+   }
+  },
+  {
+   "id": "con-29",
+   "title": "Herr Dr. Meier",
+   "text": "Bitte wenden Sie sich an Herrn Dr. Klaus Meier.",
+   "request": {
+    "fields": {
+     "person": {
+      "type": "person",
+      "description": "Ansprechpartner"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "person": "Dr. Klaus Meier"
+    },
+    "issues": []
+   },
+   "accept": {
+    "person": [
+     "Herrn Dr. Klaus Meier",
+     "Klaus Meier"
+    ]
+   }
+  },
+  {
+   "id": "con-30",
+   "title": "KG mit Umlaut",
+   "text": "Der Auftrag geht an die Müller & Söhne KG.",
+   "request": {
+    "fields": {
+     "company": {
+      "type": "organization",
+      "description": "Auftragnehmer"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "company": "Müller & Söhne KG"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-31",
+   "title": "AG",
+   "text": "Vertragspartner ist die Sonnenhof AG.",
+   "request": {
+    "fields": {
+     "company": {
+      "type": "organization",
+      "description": "Vertragspartner"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "company": "Sonnenhof AG"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-33",
+   "title": "Frankfurt am Main",
+   "text": "Die Lieferung geht nach Frankfurt am Main.",
+   "request": {
+    "fields": {
+     "city": {
+      "type": "place",
+      "description": "Zielort"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "city": "Frankfurt am Main"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-34",
+   "title": "PLZ München",
+   "text": "Postleitzahl: 80331 München.",
+   "request": {
+    "fields": {
+     "pc": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "pc": "80331"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-35",
+   "title": "PLZ Hamburg",
+   "text": "Anschrift: Jungfernstieg 12, 20095 Hamburg.",
+   "request": {
+    "fields": {
+     "pc": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "pc": "20095"
+    },
+    "issues": []
+   }
+  },
+  {
+   "id": "con-38",
+   "title": "Vollständige Visitenkarte",
+   "text": "Lena Hoffmann, Sonnenhof AG, lena.hoffmann@sonnenhof.de, +49 89 998877.",
+   "request": {
+    "fields": {
+     "p": {
+      "type": "person",
+      "description": "Name"
+     },
+     "c": {
+      "type": "organization",
+      "description": "Firma"
+     },
+     "e": {
+      "type": "email",
+      "description": "E-Mail"
+     },
+     "t": {
+      "type": "phone",
+      "description": "Telefon",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "p": "Lena Hoffmann",
+     "c": "Sonnenhof AG",
+     "e": "lena.hoffmann@sonnenhof.de",
+     "t": "+4989998877"
+    },
+    "issues": []
+   }
+  }
+ ],
+ "records": [
+  {
+   "id": "rec-1",
+   "title": "Zwei Produkte",
+   "text": "Alpha ist 10 cm breit. Beta ist 2 inches breit.",
+   "request": {
+    "many": true,
+    "anchor": "product",
+    "fields": {
+     "product": {
+      "type": "text",
+      "description": "Produktbezeichnung"
+     },
+     "width": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "product": "Alpha",
+      "width": 100
+     },
+     {
+      "product": "Beta",
+      "width": 50.8
+     }
+    ],
+    "issues": []
+   }
+  },
+  {
+   "id": "rec-2",
+   "title": "Zwei Teammitglieder",
+   "text": "Im Projektteam arbeiten Anna Weber (anna.weber@nordlicht.de) und Jonas Krüger (jonas.krueger@nordlicht.de). Beide sind erreichbar.",
+   "request": {
+    "many": true,
+    "anchor": "name",
+    "fields": {
+     "name": {
+      "type": "person",
+      "description": "Teammitglied"
+     },
+     "email": {
+      "type": "email",
+      "description": "E-Mail des Teammitglieds"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "name": "Anna Weber",
+      "email": "anna.weber@nordlicht.de"
+     },
+     {
+      "name": "Jonas Krüger",
+      "email": "jonas.krueger@nordlicht.de"
+     }
+    ],
+    "issues": []
+   }
+  },
+  {
+   "id": "rec-3",
+   "title": "Lieferanten mit Beträgen",
+   "text": "Die Nordlicht GmbH berechnet 1.200,00 EUR, die Südwind AG 980,50 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "supplier",
+    "fields": {
+     "supplier": {
+      "type": "organization",
+      "description": "Lieferant"
+     },
+     "amount": {
+      "type": "money",
+      "description": "berechneter Betrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "supplier": "Nordlicht GmbH",
+      "amount": 1200
+     },
+     {
+      "supplier": "Südwind AG",
+      "amount": 980.5
+     }
+    ],
+    "issues": []
+   }
+  },
+  {
+   "id": "rec-4",
+   "title": "Gleicher Name, zwei Datensätze",
+   "text": "Atlas: Breite 10 cm. Atlas: Breite 12 cm.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "product",
+    "fields": {
+     "product": {
+      "type": "text",
+      "description": "Produktbezeichnung"
+     },
+     "width": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "product": "Atlas",
+      "width": 100
+     },
+     {
+      "product": "Atlas",
+      "width": 120
+     }
+    ],
+    "issues": []
+   }
+  },
+  {
+   "id": "rec-5",
+   "title": "Ein Wert fehlt",
+   "text": "Atlas ist 12,5 cm breit. Boreal ist 8 cm breit und 3 kg schwer.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "product",
+    "fields": {
+     "product": {
+      "type": "text",
+      "description": "Produktbezeichnung"
+     },
+     "width": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "mm"
+     },
+     "weight": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "product": "Atlas",
+      "width": 125,
+      "weight": null
+     },
+     {
+      "product": "Boreal",
+      "width": 80,
+      "weight": 3
+     }
+    ],
+    "issues": [
+     {
+      "field": "weight",
+      "code": "not_found",
+      "index": 0
+     }
+    ]
+   }
+  },
+  {
+   "id": "rec-6",
+   "title": "Drei Modelle",
+   "text": "Der Atlas wiegt 12 kg und ist 40 cm breit. Der Boreal wiegt 8 kg und ist 35 cm breit. Der Cirrus wiegt 5 kg und ist 30 cm breit.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "model",
+    "fields": {
+     "model": {
+      "type": "text",
+      "description": "Modellname"
+     },
+     "weight": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     },
+     "width": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "model": "Atlas",
+      "weight": 12,
+      "width": 400
+     },
+     {
+      "model": "Boreal",
+      "weight": 8,
+      "width": 350
+     },
+     {
+      "model": "Cirrus",
+      "weight": 5,
+      "width": 300
+     }
+    ],
+    "issues": []
+   }
+  },
+  {
+   "id": "rec-7",
+   "title": "Personen mit Telefon",
+   "text": "Anna Weber erreichen Sie unter +49 89 1234567, Jonas Krüger unter +49 30 7654321.",
+   "request": {
+    "many": true,
+    "anchor": "name",
+    "fields": {
+     "name": {
+      "type": "person",
+      "description": "Ansprechpartner"
+     },
+     "phone": {
+      "type": "phone",
+      "description": "Telefonnummer",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "name": "Anna Weber",
+      "phone": "+49891234567"
+     },
+     {
+      "name": "Jonas Krüger",
+      "phone": "+49307654321"
+     }
+    ],
+    "issues": []
+   }
+  },
+  {
+   "id": "rec-8",
+   "title": "Firmen mit Sitz",
+   "text": "Die Nordlicht GmbH sitzt in Hamburg, die Südwind AG in München.",
+   "request": {
+    "many": true,
+    "anchor": "company",
+    "fields": {
+     "company": {
+      "type": "organization",
+      "description": "Firma"
+     },
+     "city": {
+      "type": "place",
+      "description": "Sitz der Firma"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "company": "Nordlicht GmbH",
+      "city": "Hamburg"
+     },
+     {
+      "company": "Südwind AG",
+      "city": "München"
+     }
+    ],
+    "issues": []
+   }
+  },
+  {
+   "id": "rec-10",
+   "title": "Personen mit Eintrittsdatum",
+   "text": "Anna Weber wurde am 3. Mai 2026 eingestellt, Jonas Krüger am 1. Juni 2026.",
+   "request": {
+    "many": true,
+    "anchor": "name",
+    "fields": {
+     "name": {
+      "type": "person",
+      "description": "Mitarbeiter"
+     },
+     "start": {
+      "type": "date",
+      "description": "Eintrittsdatum",
+      "date_order": "DMY"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "name": "Anna Weber",
+      "start": "2026-05-03"
+     },
+     {
+      "name": "Jonas Krüger",
+      "start": "2026-06-01"
+     }
+    ],
+    "issues": []
+   }
+  },
+  {
+   "id": "rec-11",
+   "title": "Produkte mit Preis",
+   "text": "Der Atlas kostet 249,00 EUR, der Boreal 199,50 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "product",
+    "fields": {
+     "product": {
+      "type": "text",
+      "description": "Produkt"
+     },
+     "price": {
+      "type": "money",
+      "description": "Preis",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "product": "Atlas",
+      "price": 249
+     },
+     {
+      "product": "Boreal",
+      "price": 199.5
+     }
+    ],
+    "issues": []
+   }
+  },
+  {
+   "id": "rec-15",
+   "title": "Drei Teammitglieder mit E-Mail",
+   "text": "Im Team arbeiten Anna Weber (anna.weber@nordlicht.de), Jonas Krüger (jonas.krueger@nordlicht.de) und Lena Hoffmann (lena.hoffmann@nordlicht.de).",
+   "request": {
+    "many": true,
+    "anchor": "name",
+    "fields": {
+     "name": {
+      "type": "person",
+      "description": "Teammitglied"
+     },
+     "email": {
+      "type": "email",
+      "description": "E-Mail"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "name": "Anna Weber",
+      "email": "anna.weber@nordlicht.de"
+     },
+     {
+      "name": "Jonas Krüger",
+      "email": "jonas.krueger@nordlicht.de"
+     },
+     {
+      "name": "Lena Hoffmann",
+      "email": "lena.hoffmann@nordlicht.de"
+     }
+    ],
+    "issues": []
+   }
+  },
+  {
+   "id": "rec-16",
+   "title": "Produkte mit Gewicht und Preis",
+   "text": "Der Atlas wiegt 12 kg und kostet 249,00 EUR. Der Boreal wiegt 8 kg und kostet 199,50 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "product",
+    "fields": {
+     "product": {
+      "type": "text",
+      "description": "Produkt"
+     },
+     "weight": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     },
+     "price": {
+      "type": "money",
+      "description": "Preis",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "product": "Atlas",
+      "weight": 12,
+      "price": 249
+     },
+     {
+      "product": "Boreal",
+      "weight": 8,
+      "price": 199.5
+     }
+    ],
+    "issues": []
+   }
+  },
+  {
+   "id": "rec-21",
+   "title": "Produkte mit Höhe",
+   "text": "Das Modell Nova ist 85 cm hoch, das Modell Terra 1,2 m.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "model",
+    "fields": {
+     "model": {
+      "type": "text",
+      "description": "Modell"
+     },
+     "height": {
+      "type": "quantity",
+      "description": "Höhe",
+      "unit": "cm"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "model": "Modell Nova",
+      "height": 85
+     },
+     {
+      "model": "Modell Terra",
+      "height": 120
+     }
+    ],
+    "issues": []
+   },
+   "accept": {
+    "model": [
+     "Nova",
+     "Terra"
+    ]
+   }
+  }
+ ],
+ "rejection": [
+  {
+   "id": "rej-1",
+   "title": "Widersprüchliche Beträge",
+   "text": "Der Betrag beträgt 1.200,00 EUR, korrigiert 1.250,00 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "amount": {
+      "type": "money",
+      "description": "Rechnungsbetrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "amount": null
+    },
+    "issues": [
+     {
+      "field": "amount",
+      "code": "ambiguous_value"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-2",
+   "title": "Kein Datum genannt",
+   "text": "Die Lieferung erfolgt zeitnah nach Zahlungseingang.",
+   "request": {
+    "fields": {
+     "delivery": {
+      "type": "date",
+      "description": "Lieferdatum",
+      "date_order": "DMY"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "delivery": null
+    },
+    "issues": [
+     {
+      "field": "delivery",
+      "code": "not_found"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-3",
+   "title": "IBAN mit falscher Prüfziffer",
+   "text": "Bitte überweisen auf IBAN DE89 3704 0044 0532 0130 01.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": null
+    },
+    "issues": [
+     {
+      "field": "iban",
+      "code": "invalid_iban"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-4",
+   "title": "Datum ohne festgelegte Reihenfolge",
+   "text": "Der Termin ist am 03.04.2026.",
+   "request": {
+    "fields": {
+     "appointment": {
+      "type": "date",
+      "description": "Termin"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "appointment": null
+    },
+    "issues": [
+     {
+      "field": "appointment",
+      "code": "ambiguous_or_unsupported_date"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-5",
+   "title": "Währung passt nicht",
+   "text": "Der Preis beträgt CA$ 40,00.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "price": {
+      "type": "money",
+      "description": "Preis",
+      "currency": "USD"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "price": null
+    },
+    "issues": [
+     {
+      "field": "price",
+      "code": "currency_mismatch"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-6",
+   "title": "USt-IdNr. mit falscher Prüfziffer",
+   "text": "USt-IdNr. DE136695977.",
+   "request": {
+    "fields": {
+     "vat_id": {
+      "type": "identifier",
+      "description": "USt-IdNr.",
+      "format": "vat",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "vat_id": null
+    },
+    "issues": [
+     {
+      "field": "vat_id",
+      "code": "invalid_identifier"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-7",
+   "title": "Relative Frist",
+   "text": "Zahlung bis nächsten Freitag.",
+   "request": {
+    "fields": {
+     "deadline": {
+      "type": "date",
+      "description": "Zahlungsfrist",
+      "date_order": "DMY"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "deadline": null
+    },
+    "issues": [
+     {
+      "field": "deadline",
+      "code": "ambiguous_or_unsupported_date"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-8",
+   "title": "Einheit fehlt",
+   "text": "Die Breite beträgt 12,5.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "width": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "width": null
+    },
+    "issues": [
+     {
+      "field": "width",
+      "code": "missing_unit"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-9",
+   "title": "Bereichsangabe",
+   "text": "Die Höhe liegt bei 10 bis 12 cm.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "height": {
+      "type": "quantity",
+      "description": "Höhe",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "height": null
+    },
+    "issues": [
+     {
+      "field": "height",
+      "code": "non_scalar_quantity"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-10",
+   "title": "Mehrdeutiges Pfund",
+   "text": "Das Gerät wiegt 3 Pfund.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "weight": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "weight": null
+    },
+    "issues": [
+     {
+      "field": "weight",
+      "code": "ambiguous_unit"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-11",
+   "title": "Ungültige IBAN-Länge",
+   "text": "Konto: DE89 3704 0044 0532 0130.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": null
+    },
+    "issues": [
+     {
+      "field": "iban",
+      "code": "invalid_iban"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-12",
+   "title": "Unbekannte Einheit",
+   "text": "Das Gerät misst 5 Handbreit in der Breite.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "width": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "width": null
+    },
+    "issues": [
+     {
+      "field": "width",
+      "code": "unsupported_unit"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-13",
+   "title": "Relatives Datum „morgen“",
+   "text": "Der Termin ist morgen um 10 Uhr.",
+   "request": {
+    "fields": {
+     "d": {
+      "type": "date",
+      "description": "Termin",
+      "date_order": "DMY"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "d": null
+    },
+    "issues": [
+     {
+      "field": "d",
+      "code": "ambiguous_or_unsupported_date"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-14",
+   "title": "Zwei verschiedene Gewichte",
+   "text": "Das Paket wiegt laut Lieferschein 12 kg, laut Waage 14 kg.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "weight": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "weight": null
+    },
+    "issues": [
+     {
+      "field": "weight",
+      "code": "ambiguous_value"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-15",
+   "title": "Keine E-Mail im Text",
+   "text": "Bitte rufen Sie uns an, wir sind täglich erreichbar.",
+   "request": {
+    "fields": {
+     "email": {
+      "type": "email",
+      "description": "E-Mail-Adresse"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "email": null
+    },
+    "issues": [
+     {
+      "field": "email",
+      "code": "not_found"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-16",
+   "title": "Keine Telefonnummer im Text",
+   "text": "Schreiben Sie uns gern per E-Mail.",
+   "request": {
+    "fields": {
+     "phone": {
+      "type": "phone",
+      "description": "Telefonnummer",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "phone": null
+    },
+    "issues": [
+     {
+      "field": "phone",
+      "code": "not_found"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-17",
+   "title": "Unklares Zahlenformat",
+   "text": "Das Gerät wiegt 1.234 kg.",
+   "request": {
+    "fields": {
+     "weight": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "weight": null
+    },
+    "issues": [
+     {
+      "field": "weight",
+      "code": "ambiguous_number_format"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-18",
+   "title": "Näherungswert",
+   "text": "Die Breite beträgt ca. 12 cm.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "width": {
+      "type": "quantity",
+      "description": "Breite",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "width": null
+    },
+    "issues": [
+     {
+      "field": "width",
+      "code": "non_scalar_quantity"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-19",
+   "title": "USt-IdNr. mit unbekanntem Land",
+   "text": "USt-IdNr. XX123456789.",
+   "request": {
+    "fields": {
+     "vat": {
+      "type": "identifier",
+      "description": "USt-IdNr.",
+      "format": "vat",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "vat": null
+    },
+    "issues": [
+     {
+      "field": "vat",
+      "code": "invalid_identifier"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-20",
+   "title": "Währung fehlt",
+   "text": "Der Preis beträgt 40,00.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "price": {
+      "type": "money",
+      "description": "Preis",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "price": null
+    },
+    "issues": [
+     {
+      "field": "price",
+      "code": "missing_or_multiple_currency"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-21",
+   "title": "Zahlendreher in der IBAN",
+   "text": "Konto: DE89 3704 0044 0532 0310 00.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": null
+    },
+    "issues": [
+     {
+      "field": "iban",
+      "code": "invalid_iban"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-22",
+   "title": "Falsche österreichische UID",
+   "text": "UID ATU13585628.",
+   "request": {
+    "fields": {
+     "vat": {
+      "type": "identifier",
+      "description": "UID-Nummer",
+      "format": "vat",
+      "country": "AT"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "vat": null
+    },
+    "issues": [
+     {
+      "field": "vat",
+      "code": "invalid_identifier"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-23",
+   "title": "Zahlungsziel in Tagen",
+   "text": "Zahlbar innerhalb von 14 Tagen nach Rechnungseingang.",
+   "request": {
+    "fields": {
+     "due": {
+      "type": "date",
+      "description": "Fälligkeitsdatum",
+      "date_order": "DMY"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "due": null
+    },
+    "issues": [
+     {
+      "field": "due",
+      "code": "ambiguous_or_unsupported_date"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-24",
+   "title": "Kein Betrag",
+   "text": "Wir bedanken uns für Ihren Auftrag.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "amount": {
+      "type": "money",
+      "description": "Rechnungsbetrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "amount": null
+    },
+    "issues": [
+     {
+      "field": "amount",
+      "code": "not_found"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-25",
+   "title": "Kein Gewicht",
+   "text": "Das Gerät ist robust und langlebig.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "m": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "m": null
+    },
+    "issues": [
+     {
+      "field": "m",
+      "code": "not_found"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-26",
+   "title": "Drei Gewichtsangaben",
+   "text": "Die Chargen wiegen 12 kg, 14 kg und 15 kg.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "m": {
+      "type": "quantity",
+      "description": "Gewicht der Charge",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "m": null
+    },
+    "issues": [
+     {
+      "field": "m",
+      "code": "ambiguous_value"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-27",
+   "title": "Zwei Rechnungsdaten",
+   "text": "Rechnungsdatum 14.03.2026, berichtigt am 20.03.2026.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "date": null
+    },
+    "issues": [
+     {
+      "field": "date",
+      "code": "ambiguous_value"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-28",
+   "title": "Währungssymbol passt nicht",
+   "text": "Total: US$ 99.00.",
+   "request": {
+    "locale": "en-US",
+    "fields": {
+     "total": {
+      "type": "money",
+      "description": "Total",
+      "currency": "EUR",
+      "locale": "en-US"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "total": null
+    },
+    "issues": [
+     {
+      "field": "total",
+      "code": "currency_mismatch"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-29",
+   "title": "Pfund Sterling statt Euro",
+   "text": "Price: £ 45.00.",
+   "request": {
+    "locale": "en-GB",
+    "fields": {
+     "price": {
+      "type": "money",
+      "description": "Price",
+      "currency": "EUR",
+      "locale": "en-GB"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "price": null
+    },
+    "issues": [
+     {
+      "field": "price",
+      "code": "currency_mismatch"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-30",
+   "title": "Ohne Länderangabe ist die Postleitzahl ungültig",
+   "text": "Postleitzahl 1234.",
+   "request": {
+    "fields": {
+     "pc": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "pc": null
+    },
+    "issues": [
+     {
+      "field": "pc",
+      "code": "invalid_postal_code"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-31",
+   "title": "Ungültige Telefonnummer",
+   "text": "Telefon: +49 12.",
+   "request": {
+    "fields": {
+     "phone": {
+      "type": "phone",
+      "description": "Telefonnummer",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "phone": null
+    },
+    "issues": [
+     {
+      "field": "phone",
+      "code": "invalid_phone"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-32",
+   "title": "Ungültige E-Mail",
+   "text": "Antworten an: max@@beispiel.de.",
+   "request": {
+    "fields": {
+     "email": {
+      "type": "email",
+      "description": "E-Mail"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "email": null
+    },
+    "issues": [
+     {
+      "field": "email",
+      "code": "invalid_email"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-33",
+   "title": "Gesamtbetrag mit zwei Beträgen",
+   "text": "Der Betrag beträgt 100,00 EUR oder alternativ 120,00 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "amount": {
+      "type": "money",
+      "description": "Betrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "amount": null
+    },
+    "issues": [
+     {
+      "field": "amount",
+      "code": "ambiguous_value"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-34",
+   "title": "Datum ohne Jahr",
+   "text": "Der Termin ist am 3. Mai.",
+   "request": {
+    "fields": {
+     "d": {
+      "type": "date",
+      "description": "Termin",
+      "date_order": "DMY"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "d": null
+    },
+    "issues": [
+     {
+      "field": "d",
+      "code": "ambiguous_or_unsupported_date"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rej-35",
+   "title": "Zeitraum statt Gewicht",
+   "text": "Das Gewicht liegt zwischen 3 und 5 kg.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "m": {
+      "type": "quantity",
+      "description": "Gewicht",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "m": null
+    },
+    "issues": [
+     {
+      "field": "m",
+      "code": "non_scalar_quantity"
+     }
+    ]
+   }
+  }
+ ],
+ "edge": [
+  {
+   "id": "inv-3",
+   "title": "Netto, Steuer und Brutto",
+   "text": "Rechnung Nr. 2026-0815 vom 02.04.2026. Nettobetrag 1.000,00 EUR, Umsatzsteuer 190,00 EUR, Rechnungsbetrag 1.190,00 EUR. Zahlbar bis 16.04.2026.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "invoice_no": {
+      "type": "identifier",
+      "description": "Rechnungsnummer"
+     },
+     "invoice_date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "gross_amount": {
+      "type": "money",
+      "description": "Rechnungsbetrag (brutto)",
+      "currency": "EUR"
+     },
+     "due_date": {
+      "type": "date",
+      "description": "Zahlungsfrist",
+      "date_order": "DMY"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "invoice_no": "2026-0815",
+     "invoice_date": "2026-04-02",
+     "gross_amount": 1190,
+     "due_date": "2026-04-16"
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-4",
+   "title": "Ausgeschriebene Monatsnamen",
+   "text": "Beleg RG-77/2026. Datum: 5. Juni 2026. Fällig am 19. Juni 2026. Summe: 4.512,30 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "no": {
+      "type": "identifier",
+      "description": "Belegnummer"
+     },
+     "issued": {
+      "type": "date",
+      "description": "Belegdatum",
+      "date_order": "DMY"
+     },
+     "due": {
+      "type": "date",
+      "description": "Fälligkeitsdatum",
+      "date_order": "DMY"
+     },
+     "total": {
+      "type": "money",
+      "description": "Summe",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "no": "RG-77/2026",
+     "issued": "2026-06-05",
+     "due": "2026-06-19",
+     "total": 4512.3
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-5",
+   "title": "Rechnung mit IBAN",
+   "text": "Mit Rechnung 10482 vom 31.01.2026 stellen wir Ihnen 860,00 EUR in Rechnung. Bitte überweisen Sie auf DE73 1002 0030 0001 2345 67.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "no": {
+      "type": "identifier",
+      "description": "Rechnungsnummer"
+     },
+     "date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "amount": {
+      "type": "money",
+      "description": "Rechnungsbetrag",
+      "currency": "EUR"
+     },
+     "iban": {
+      "type": "iban",
+      "description": "IBAN für die Überweisung"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "no": "10482",
+     "date": "2026-01-31",
+     "amount": 860,
+     "iban": "DE73100200300001234567"
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-9",
+   "title": "Leistungs- und Rechnungsdatum",
+   "text": "Leistungsdatum 15.03.2026, Rechnungsdatum 20.03.2026. Rechnung 2026-0099 über 310,00 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "service": {
+      "type": "date",
+      "description": "Leistungsdatum",
+      "date_order": "DMY"
+     },
+     "issued": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "no": {
+      "type": "identifier",
+      "description": "Rechnungsnummer"
+     },
+     "amount": {
+      "type": "money",
+      "description": "Rechnungsbetrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "service": "2026-03-15",
+     "issued": "2026-03-20",
+     "no": "2026-0099",
+     "amount": 310
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-10",
+   "title": "Österreichische Rechnung",
+   "text": "Lieferant: Alpenwerk GmbH, UID ATU13585627. Rechnung 5521 vom 8. Mai 2026 über 780,00 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "vat": {
+      "type": "identifier",
+      "description": "UID-Nummer des Lieferanten",
+      "format": "vat",
+      "country": "AT"
+     },
+     "no": {
+      "type": "identifier",
+      "description": "Rechnungsnummer"
+     },
+     "date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "amount": {
+      "type": "money",
+      "description": "Rechnungsbetrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "vat": "U13585627",
+     "no": "5521",
+     "date": "2026-05-08",
+     "amount": 780
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-15",
+   "title": "Bestell- und Rechnungsnummer",
+   "text": "Zu Ihrer Bestellung B-5521 stellen wir Rechnung Nr. R-90412 aus.",
+   "request": {
+    "fields": {
+     "invoice_no": {
+      "type": "identifier",
+      "description": "Rechnungsnummer"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "invoice_no": "R-90412"
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-17",
+   "title": "Zahlung per IBAN (Niederlande)",
+   "text": "Bankverbindung: NL91 ABNA 0417 1643 00, lautend auf Van Dijk B.V.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN des Empfängers"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": "NL91ABNA0417164300"
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-21",
+   "title": "Kurze Rechnung",
+   "text": "Rechnung 2026-0501 vom 01.05.2026 über 1.500,00 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "no": {
+      "type": "identifier",
+      "description": "Rechnungsnummer"
+     },
+     "date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "amount": {
+      "type": "money",
+      "description": "Rechnungsbetrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "no": "2026-0501",
+     "date": "2026-05-01",
+     "amount": 1500
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-24",
+   "title": "Gutschrift",
+   "text": "Gutschrift GS-2026-07 vom 3. Februar 2026 über 125,00 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "no": {
+      "type": "identifier",
+      "description": "Gutschriftsnummer"
+     },
+     "date": {
+      "type": "date",
+      "description": "Datum der Gutschrift",
+      "date_order": "DMY"
+     },
+     "amount": {
+      "type": "money",
+      "description": "Gutschriftsbetrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "no": "GS-2026-07",
+     "date": "2026-02-03",
+     "amount": 125
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-27",
+   "title": "USt-IdNr. Variante 3",
+   "text": "Steuerinformation: USt-IdNr. DE558417846, Amtsgericht München HRB 123456.",
+   "request": {
+    "fields": {
+     "vat": {
+      "type": "identifier",
+      "description": "USt-IdNr.",
+      "format": "vat",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "vat": "558417846"
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-32",
+   "title": "IBAN Spanien",
+   "text": "Cuenta: ES91 2100 0418 4502 0005 1332.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": "ES9121000418450200051332"
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-33",
+   "title": "IBAN Großbritannien",
+   "text": "Pay to GB82 WEST 1234 5698 7654 32 by bank transfer.",
+   "request": {
+    "fields": {
+     "iban": {
+      "type": "iban",
+      "description": "IBAN"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "iban": "GB82WEST12345698765432"
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "inv-34",
+   "title": "Großer Betrag",
+   "text": "Rechnung Nr. 100234 vom 12.12.2026, Betrag 15.000,00 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "no": {
+      "type": "identifier",
+      "description": "Rechnungsnummer"
+     },
+     "date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "amount": {
+      "type": "money",
+      "description": "Betrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "no": "100234",
+     "date": "2026-12-12",
+     "amount": 15000
+    },
+    "issues": []
+   },
+   "from": "invoice"
+  },
+  {
+   "id": "unit-23",
+   "title": "Nutzlast in Tonnen",
+   "text": "Die Nutzlast des Transporters beträgt 1,2 t.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "m": {
+      "type": "quantity",
+      "description": "Nutzlast",
+      "unit": "kg"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "m": 1200
+    },
+    "issues": []
+   },
+   "from": "units"
+  },
+  {
+   "id": "unit-35",
+   "title": "Fahrenheit zu Kelvin",
+   "text": "Das Gerät arbeitet bis 140 °F.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "t": {
+      "type": "quantity",
+      "description": "maximale Betriebstemperatur",
+      "unit": "degC"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "t": 60
+    },
+    "issues": []
+   },
+   "from": "units"
+  },
+  {
+   "id": "con-3",
+   "title": "Lieferadresse mit Beschriftung",
+   "text": "Lieferadresse: Lindenweg 14, 04107 Leipzig. Bitte beim Pförtner melden.",
+   "request": {
+    "locale": "de-DE",
+    "fields": {
+     "address": {
+      "type": "address",
+      "description": "Lieferadresse",
+      "country": "DE"
+     },
+     "postcode": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "address": "Lindenweg 14, 04107 Leipzig",
+     "postcode": "04107"
+    },
+    "issues": []
+   },
+   "from": "contacts"
+  },
+  {
+   "id": "con-7",
+   "title": "Adresse in München",
+   "text": "Unser Büro: Marienplatz 8, 80331 München.",
+   "request": {
+    "fields": {
+     "address": {
+      "type": "address",
+      "description": "Büroadresse",
+      "country": "DE"
+     },
+     "postcode": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "DE"
+     },
+     "city": {
+      "type": "place",
+      "description": "Ort"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "address": "Marienplatz 8, 80331 München",
+     "postcode": "80331",
+     "city": "München"
+    },
+    "issues": []
+   },
+   "from": "contacts"
+  },
+  {
+   "id": "con-12",
+   "title": "Webadresse mit Pfad und Query",
+   "text": "Alle Produkte finden Sie unter https://www.beispiel.de/produkte?kategorie=7.",
+   "request": {
+    "fields": {
+     "url": {
+      "type": "url",
+      "description": "Webseite der Produkte"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "url": "https://www.beispiel.de/produkte?kategorie=7"
+    },
+    "issues": []
+   },
+   "from": "contacts"
+  },
+  {
+   "id": "con-15",
+   "title": "Schweizer Postleitzahl",
+   "text": "Filiale Zürich, Bahnhofstrasse 10, 8001 Zürich.",
+   "request": {
+    "fields": {
+     "postcode": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "CH"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "postcode": "8001"
+    },
+    "issues": []
+   },
+   "from": "contacts"
+  },
+  {
+   "id": "con-19",
+   "title": "Französische Adresse",
+   "text": "Notre siège: 12 rue de la Paix, 75002 Paris.",
+   "request": {
+    "fields": {
+     "postcode": {
+      "type": "postcode",
+      "description": "code postal",
+      "country": "FR"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "postcode": "75002"
+    },
+    "issues": []
+   },
+   "from": "contacts"
+  },
+  {
+   "id": "con-20",
+   "title": "Absender mit E-Mail",
+   "text": "Absender: Lena Hoffmann (lena.hoffmann@sonnenhof.de).",
+   "request": {
+    "fields": {
+     "sender": {
+      "type": "person",
+      "description": "Absender"
+     },
+     "email": {
+      "type": "email",
+      "description": "E-Mail des Absenders"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "sender": "Lena Hoffmann",
+     "email": "lena.hoffmann@sonnenhof.de"
+    },
+    "issues": []
+   },
+   "from": "contacts"
+  },
+  {
+   "id": "con-32",
+   "title": "e.K.",
+   "text": "Lieferant: Bäckerei Krause e.K.",
+   "request": {
+    "fields": {
+     "company": {
+      "type": "organization",
+      "description": "Lieferant"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "company": "Bäckerei Krause e.K."
+    },
+    "issues": []
+   },
+   "from": "contacts"
+  },
+  {
+   "id": "con-36",
+   "title": "PLZ Köln",
+   "text": "Büro Köln, Hohe Straße 40, 50667 Köln.",
+   "request": {
+    "fields": {
+     "pc": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "pc": "50667"
+    },
+    "issues": []
+   },
+   "from": "contacts"
+  },
+  {
+   "id": "con-37",
+   "title": "URL ohne Schema",
+   "text": "Mehr unter www.sonnenhof.de.",
+   "request": {
+    "fields": {
+     "url": {
+      "type": "url",
+      "description": "Webseite"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "url": "www.sonnenhof.de"
+    },
+    "issues": []
+   },
+   "from": "contacts"
+  },
+  {
+   "id": "con-39",
+   "title": "Adresse in Berlin",
+   "text": "Besucheradresse: Friedrichstraße 100, 10117 Berlin.",
+   "request": {
+    "fields": {
+     "address": {
+      "type": "address",
+      "description": "Besucheradresse"
+     },
+     "pc": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "DE"
+     },
+     "city": {
+      "type": "place",
+      "description": "Ort"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "address": "Friedrichstraße 100, 10117 Berlin",
+     "pc": "10117",
+     "city": "Berlin"
+    },
+    "issues": []
+   },
+   "from": "contacts"
+  },
+  {
+   "id": "con-40",
+   "title": "Straße und Ort",
+   "text": "Wir sind in Köln, Domstraße 3.",
+   "request": {
+    "fields": {
+     "city": {
+      "type": "place",
+      "description": "Ort"
+     }
+    }
+   },
+   "expected": {
+    "data": {
+     "city": "Köln"
+    },
+    "issues": []
+   },
+   "from": "contacts"
+  },
+  {
+   "id": "rec-9",
+   "title": "Modelle mit Temperatur",
+   "text": "Modell A hält bis 85 °C aus, Modell B bis 120 °C.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "model",
+    "fields": {
+     "model": {
+      "type": "text",
+      "description": "Modellbezeichnung"
+     },
+     "max_t": {
+      "type": "quantity",
+      "description": "maximale Temperatur",
+      "unit": "degC"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "model": "Modell A",
+      "max_t": 85
+     },
+     {
+      "model": "Modell B",
+      "max_t": 120
+     }
+    ],
+    "issues": []
+   },
+   "from": "records"
+  },
+  {
+   "id": "rec-12",
+   "title": "Vier Standorte",
+   "text": "Das Werk Nord ist 12.000 m² groß, das Werk Süd 8.500 m² und das Werk Ost 6.200 m².",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "site",
+    "fields": {
+     "site": {
+      "type": "text",
+      "description": "Standort"
+     },
+     "area": {
+      "type": "quantity",
+      "description": "Fläche",
+      "unit": "m2"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "site": "Werk Nord",
+      "area": 12000
+     },
+     {
+      "site": "Werk Süd",
+      "area": 8500
+     },
+     {
+      "site": "Werk Ost",
+      "area": 6200
+     }
+    ],
+    "issues": []
+   },
+   "from": "records"
+  },
+  {
+   "id": "rec-13",
+   "title": "Zwei Personen mit Titel",
+   "text": "Dr. Anna Weber leitet die Entwicklung, Prof. Jonas Krüger den Vertrieb.",
+   "request": {
+    "many": true,
+    "anchor": "name",
+    "fields": {
+     "name": {
+      "type": "person",
+      "description": "Abteilungsleiter"
+     },
+     "area": {
+      "type": "text",
+      "description": "Abteilung"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "name": "Dr. Anna Weber",
+      "area": "Entwicklung"
+     },
+     {
+      "name": "Prof. Jonas Krüger",
+      "area": "Vertrieb"
+     }
+    ],
+    "issues": []
+   },
+   "accept": {
+    "name": [
+     "Anna Weber",
+     "Jonas Krüger"
+    ]
+   },
+   "from": "records"
+  },
+  {
+   "id": "rec-14",
+   "title": "Zwei Zeitpunkte",
+   "text": "Das Training A dauert 2 h, das Training B 90 min.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "course",
+    "fields": {
+     "course": {
+      "type": "text",
+      "description": "Training"
+     },
+     "duration": {
+      "type": "quantity",
+      "description": "Dauer",
+      "unit": "min"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "course": "Training A",
+      "duration": 120
+     },
+     {
+      "course": "Training B",
+      "duration": 90
+     }
+    ],
+    "issues": []
+   },
+   "from": "records"
+  },
+  {
+   "id": "rec-17",
+   "title": "Firmen mit Betrag und Datum",
+   "text": "Die Nordlicht GmbH stellte am 5. Mai 2026 eine Rechnung über 1.200,00 EUR, die Südwind AG am 9. Mai 2026 über 980,50 EUR.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "company",
+    "fields": {
+     "company": {
+      "type": "organization",
+      "description": "Rechnungssteller"
+     },
+     "date": {
+      "type": "date",
+      "description": "Rechnungsdatum",
+      "date_order": "DMY"
+     },
+     "amount": {
+      "type": "money",
+      "description": "Rechnungsbetrag",
+      "currency": "EUR"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "company": "Nordlicht GmbH",
+      "date": "2026-05-05",
+      "amount": 1200
+     },
+     {
+      "company": "Südwind AG",
+      "date": "2026-05-09",
+      "amount": 980.5
+     }
+    ],
+    "issues": []
+   },
+   "from": "records"
+  },
+  {
+   "id": "rec-18",
+   "title": "Zwei Standorte mit Adresse",
+   "text": "Das Büro Hamburg liegt am Jungfernstieg 12, 20095 Hamburg, das Büro Köln in der Hohe Straße 40, 50667 Köln.",
+   "request": {
+    "many": true,
+    "anchor": "office",
+    "fields": {
+     "office": {
+      "type": "text",
+      "description": "Büro"
+     },
+     "postcode": {
+      "type": "postcode",
+      "description": "Postleitzahl",
+      "country": "DE"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "office": "Büro Hamburg",
+      "postcode": "20095"
+     },
+     {
+      "office": "Büro Köln",
+      "postcode": "50667"
+     }
+    ],
+    "issues": []
+   },
+   "from": "records"
+  },
+  {
+   "id": "rec-19",
+   "title": "Zwei Fahrzeuge",
+   "text": "Der Transporter T1 ist 5,4 m lang, der Transporter T2 ist 6,1 m lang.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "vehicle",
+    "fields": {
+     "vehicle": {
+      "type": "text",
+      "description": "Fahrzeug"
+     },
+     "length": {
+      "type": "quantity",
+      "description": "Länge",
+      "unit": "mm"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "vehicle": "Transporter T1",
+      "length": 5400
+     },
+     {
+      "vehicle": "Transporter T2",
+      "length": 6100
+     }
+    ],
+    "issues": []
+   },
+   "accept": {
+    "vehicle": [
+     "T1",
+     "T2"
+    ]
+   },
+   "from": "records"
+  },
+  {
+   "id": "rec-20",
+   "title": "Zwei Lieferanten mit IBAN",
+   "text": "Die Nordlicht GmbH erhält Zahlungen auf DE73 1002 0030 0001 2345 67, die Südwind AG auf DE81 7007 0010 0009 8765 43.",
+   "request": {
+    "many": true,
+    "anchor": "company",
+    "fields": {
+     "company": {
+      "type": "organization",
+      "description": "Lieferant"
+     },
+     "iban": {
+      "type": "iban",
+      "description": "IBAN"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "company": "Nordlicht GmbH",
+      "iban": "DE73100200300001234567"
+     },
+     {
+      "company": "Südwind AG",
+      "iban": "DE81700700100009876543"
+     }
+    ],
+    "issues": []
+   },
+   "from": "records"
+  },
+  {
+   "id": "rec-22",
+   "title": "Zwei Veranstaltungen",
+   "text": "Das Frühlingsfest findet am 14. Mai 2026 statt, das Sommerfest am 12. Juli 2026.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "event",
+    "fields": {
+     "event": {
+      "type": "text",
+      "description": "Veranstaltung"
+     },
+     "date": {
+      "type": "date",
+      "description": "Datum",
+      "date_order": "DMY"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "event": "Frühlingsfest",
+      "date": "2026-05-14"
+     },
+     {
+      "event": "Sommerfest",
+      "date": "2026-07-12"
+     }
+    ],
+    "issues": []
+   },
+   "from": "records"
+  },
+  {
+   "id": "rec-23",
+   "title": "Zwei Kontakte mit Telefon und Ort",
+   "text": "Anna Weber (+49 89 1234567) sitzt in München, Jonas Krüger (+49 40 7654321) in Hamburg.",
+   "request": {
+    "many": true,
+    "anchor": "name",
+    "fields": {
+     "name": {
+      "type": "person",
+      "description": "Ansprechpartner"
+     },
+     "phone": {
+      "type": "phone",
+      "description": "Telefon",
+      "country": "DE"
+     },
+     "city": {
+      "type": "place",
+      "description": "Standort"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "name": "Anna Weber",
+      "phone": "+49891234567",
+      "city": "München"
+     },
+     {
+      "name": "Jonas Krüger",
+      "phone": "+49407654321",
+      "city": "Hamburg"
+     }
+    ],
+    "issues": []
+   },
+   "from": "records"
+  },
+  {
+   "id": "rec-24",
+   "title": "Drei Behälter",
+   "text": "Behälter A fasst 50 Liter, Behälter B 120 Liter und Behälter C 300 Liter.",
+   "request": {
+    "locale": "de-DE",
+    "many": true,
+    "anchor": "tank",
+    "fields": {
+     "tank": {
+      "type": "text",
+      "description": "Behälter"
+     },
+     "volume": {
+      "type": "quantity",
+      "description": "Fassungsvermögen",
+      "unit": "L"
+     }
+    }
+   },
+   "expected": {
+    "data": [
+     {
+      "tank": "Behälter A",
+      "volume": 50
+     },
+     {
+      "tank": "Behälter B",
+      "volume": 120
+     },
+     {
+      "tank": "Behälter C",
+      "volume": 300
+     }
+    ],
+    "issues": []
+   },
+   "from": "records"
+  }
+ ]
+}

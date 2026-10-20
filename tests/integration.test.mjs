@@ -66,7 +66,7 @@ test('a down tractor yields per-case errors that count as wrong answers', async 
     const response = await fetch(`${base}/api/run`, {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({scenario: 'rejection', mode: 'tractor', warmup: false})});
     const events = (await response.text()).trim().split('\n').map(line => JSON.parse(line));
     const done = events.at(-1);
-    assert.equal(done.summaries[0].errors, 7);
+    assert.equal(done.summaries[0].errors, scenarioIndex.get('rejection').cases.length);
     assert.equal(done.summaries[0].rejectionOk, 0);
   } finally { app.close(); }
 });
@@ -105,11 +105,12 @@ test('compare mode scores a strict-schema LLM answer on data only and prices its
     const response = await fetch(`${base}/api/run`, {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({scenario: 'rejection', mode: 'compare', warmup: false})});
     const events = (await response.text()).trim().split('\n').map(line => JSON.parse(line));
     const [tractorSummary, llmSummary] = events.at(-1).summaries;
-    assert.equal(tractorSummary.exact, 7);
-    assert.equal(llmSummary.rejectionOk, 7); // all-null answers reject everything
+    const n = scenarioIndex.get('rejection').cases.length;
+    assert.equal(tractorSummary.exact, n);
+    assert.equal(llmSummary.rejectionOk, n); // all-null answers reject everything
     assert.equal(llmSummary.issuesOk, 0);
-    assert.equal(llmSummary.inputTokens, 700);
-    assert.ok(Math.abs(llmSummary.cost - 7 * (100 * 1 + 10 * 2) / 1e6) < 1e-12);
+    assert.equal(llmSummary.inputTokens, n * 100);
+    assert.ok(Math.abs(llmSummary.cost - n * (100 * 1 + 10 * 2) / 1e6) < 1e-12);
     assert.ok(seen.every(s => s.auth === 'Bearer k' && s.strict === true));
   } finally { app.close(); tractor.close(); llm.close(); }
 });

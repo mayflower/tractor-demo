@@ -47,11 +47,25 @@ function renderTabs() {
 }
 
 function renderChips() {
-  $('chips').replaceChildren(...state.scenario.cases.map(c => {
-    const b = el('button', {class: 'chip-btn', type: 'button', 'aria-pressed': String(c === state.kase)}, el('span', {class: `dot ${state.status[c.id] || ''}`}), c.title);
+  $('chips').replaceChildren(...state.scenario.cases.map((c, i) => {
+    const b = el('button', {class: `chip-btn ${state.status[c.id] || ''}`, type: 'button', 'aria-pressed': String(c === state.kase), title: c.title, 'aria-label': `${i + 1}: ${c.title}`, text: String(i + 1)});
     b.addEventListener('click', () => { if (!state.controller) selectCase(c, true); });
     return b;
   }));
+}
+
+const demoScenarios = () => state.scenarios.filter(s => s.id !== 'edge');
+const demoCases = () => demoScenarios().flatMap(s => s.cases);
+
+function renderRunHeader() {
+  const edge = state.scenario.id === 'edge';
+  const count = edge ? state.scenario.cases.length : demoCases().length;
+  $('runTitle').textContent = edge ? 'Grenzfälle messen' : 'Speed-Run';
+  $('runHint').textContent = edge ? `Alle ${count} Grenzfälle nacheinander.` : `Alle ${count} Dokumente aus allen fünf Demos, nacheinander verarbeitet.`;
+  $('measure').textContent = edge ? 'Grenzfälle messen' : 'Speed-Run starten';
+  $('selectionNote').textContent = edge
+    ? 'Hier scheitert tractor in dieser Prüfung. Die Erwartungen wurden nicht an die Ausgabe angepasst.'
+    : 'Die fünf Demos zeigen Fälle, die tractor löst; die übrigen Kandidaten stehen unter „Grenzfälle“. Das ist eine Auswahl, keine Genauigkeitsmessung.';
 }
 
 function selectScenario(scenario) {
@@ -59,11 +73,13 @@ function selectScenario(scenario) {
   state.status = {};
   $('score').replaceChildren();
   renderTabs();
+  renderRunHeader();
   selectCase(scenario.cases[0], true);
 }
 
 function selectCase(kase, autorun) {
   state.kase = kase;
+  $('caseTitle').textContent = kase.title;
   $('text').value = kase.text;
   $('request').value = JSON.stringify(kase.request, null, 2);
   $('edited').hidden = true;
@@ -76,6 +92,7 @@ function selectCase(kase, autorun) {
 function markEdited() {
   if (!state.kase) return;
   state.kase = null;
+  $('caseTitle').textContent = 'eigene Fassung';
   $('edited').hidden = false;
   renderChips();
 }
@@ -288,7 +305,8 @@ function rescale(columns) {
 }
 
 async function measure() {
-  const cases = state.scenarios.flatMap(s => s.cases);
+  const edge = state.scenario.id === 'edge';
+  const cases = edge ? state.scenario.cases : demoCases();
   const compare = $('compare').checked;
   state.controller = new AbortController();
   state.status = {};
@@ -306,7 +324,7 @@ async function measure() {
   requestAnimationFrame(clockTick);
   try {
     const response = await fetch('/api/run', {method: 'POST', headers: {'content-type': 'application/json'}, signal: state.controller.signal,
-      body: JSON.stringify({scenario: 'all', mode: compare ? 'compare' : 'tractor', schedule: 'parallel', warmup: true})});
+      body: JSON.stringify({scenario: edge ? 'edge' : 'all', mode: compare ? 'compare' : 'tractor', schedule: 'parallel', warmup: true})});
     if (!response.ok) throw new Error((await response.json().catch(() => ({}))).error || `HTTP ${response.status}`);
     const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
     let buffer = '';

@@ -22,10 +22,10 @@ docker compose up --build -d   # liest .env; tractor auf dem Host: http://host.d
 Kern ist die **Geschwindigkeit**: Text rein, typisierte und geprüfte Felder raus, in Millisekunden.
 
 - **Einzelextraktion:** Beispiel anklicken (oder eigenen Text und eigenes Schema eingeben). Oben steht die gemessene Laufzeit mit Stufenbalken aus `Server-Timing` (Warteschlange, Vorverarbeitung, Modell, Normalisierung, Netz). Mit „gegen LLM antreten“ laufen beide Systeme live gegeneinander, inklusive „×N schneller“.
-- **Speed-Run:** Alle 27 Dokumente aus fünf Demos nacheinander. tractor und LLM haben je eine Spalte; jede einzelne Extraktion erscheint mit Laufzeit, ✓/✗, Werten und Befunden, sobald sie fertig ist. Die Stoppuhr beginnt nach dem Warm-up.
+- **Speed-Run:** Alle 142 Dokumente aus fünf Demos nacheinander (LLM mit `LLM_CONCURRENCY` parallelen Anfragen, tractor mit `MAX_CONCURRENCY`). tractor und LLM haben je eine Spalte; jede einzelne Extraktion erscheint mit Laufzeit, ✓/✗, Werten und Befunden, sobald sie fertig ist. Die Stoppuhr beginnt nach dem Warm-up.
 - **Demos:** Rechnungen, Mengen und Einheiten, Kontaktdaten, mehrere Datensätze, Ablehnen statt raten (ungültige Prüfsummen, widersprüchliche Beträge, relative Fristen).
 
-27 Fälle, alle synthetisch. Einzelne sind bewusst Grenzfälle (z. B. Rechnungs- neben Kundennummer); Abweichungen werden ausgewiesen, nicht versteckt.
+**Auswahl der Fälle:** Es gibt 179 synthetische Kandidaten (Rechnungen 27, Einheiten 38, Kontakte 29, Datensätze 13, Ablehnungen 35, dazu 37 Grenzfälle). Die Sollwerte sind aus Text und Feldvertrag geschrieben, nicht aus Modellantworten. Die fünf Demos enthalten die Kandidaten, die tractor richtig beantwortet; alle übrigen stehen unverändert im Tab **Grenzfälle**, wo tractor 0 von 37 trifft. Die Demos sind deshalb eine Auswahl und **keine Genauigkeitsmessung**; ein Vergleich mit dem LLM auf dieser Auswahl ist zugunsten von tractor verzerrt. Für belastbare Zahlen braucht es eine vorab festgelegte Fallmenge. Erwartete Issue-Codes folgen dem Wortschatz der API.
 
 ## Wie bewertet wird
 

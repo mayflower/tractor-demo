@@ -57,3 +57,10 @@ test('every scenario case is well-formed and its text fits the document limit', 
     assert.ok(kase.text.length < 600, kase.id);
   }
 });
+
+test('demo scenarios exclude the edge cases, and every candidate sits in exactly one scenario', async () => {
+  const {demoCases, scenarioIndex} = await import('../data/scenarios.mjs');
+  assert.ok(demoCases().length >= 100);
+  assert.ok(!demoCases().some(c => scenarioIndex.get('edge').cases.includes(c)));
+  assert.ok(scenarioIndex.get('edge').cases.every(c => c.from));
+});
