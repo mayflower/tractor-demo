@@ -23,7 +23,8 @@ h2{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;
 .meta{text-transform:none;letter-spacing:0;font-weight:400;font-variant-numeric:tabular-nums}
 textarea{width:100%;resize:vertical;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
 #text{font-family:var(--mono);font-size:14px;line-height:1.6;min-height:300px}
-.schema{margin:10px 0}.schema summary{cursor:pointer;color:var(--muted);font-size:13px}.schema textarea{margin-top:8px;font-size:12.5px}
+.doc h2.sub{margin-top:16px}
+#request{font-family:var(--mono);font-size:12.5px;line-height:1.5;min-height:280px;margin-bottom:12px}
 .doc-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
 .check{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}.hint{font-size:12px;color:var(--warn)}
 .button{font:inherit;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:9px 18px;border-radius:9px;cursor:pointer}
