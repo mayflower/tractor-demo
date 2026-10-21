@@ -22,7 +22,7 @@ main{max-width:1180px;margin:0 auto;padding:20px 20px 48px}
 h2{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;display:flex;justify-content:space-between}
 .meta{text-transform:none;letter-spacing:0;font-weight:400;font-variant-numeric:tabular-nums}
 textarea{width:100%;resize:vertical;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-#text{font-family:var(--mono);font-size:14px;line-height:1.6;min-height:150px}
+#text{font-family:var(--mono);font-size:14px;line-height:1.6;min-height:300px}
 .schema{margin:10px 0}.schema summary{cursor:pointer;color:var(--muted);font-size:13px}.schema textarea{margin-top:8px;font-size:12.5px}
 .doc-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
 .check{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}.hint{font-size:12px;color:var(--warn)}
@@ -105,3 +105,12 @@ textarea{width:100%;resize:vertical;font:inherit;color:var(--ink);background:var
 .rec-sep{color:var(--muted);margin:0 6px}
 .badge.amber{background:var(--warn-bg);color:var(--warn);font-weight:600}
 .llm .v{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end}
+
+.measurement{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 14px;background:var(--neutral-bg)}
+.m-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline;margin-bottom:8px}.m-meta{color:var(--muted);font-size:12px}
+.m-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.m-stat b{display:block;font-size:26px;font-family:var(--mono);line-height:1.15}.m-stat span{font-size:13px;color:var(--muted)}
+.m-cats{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:12.5px;color:var(--muted)}.m-cat b{color:var(--ink)}
+.m-note{margin:10px 0 0;font-size:12.5px;color:var(--muted)}
+
+.header-pills{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.pill-link{text-decoration:none;background:var(--warn-bg);color:var(--warn)}

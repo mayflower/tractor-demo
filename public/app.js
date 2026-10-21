@@ -379,6 +379,29 @@ async function measure() {
   }
 }
 
+/** The unfiltered measurement over every candidate, shown next to the curated speed run. */
+function renderMeasurement(m) {
+  const pct = (a, b) => b ? `${Math.round((100 * a) / b)} %` : '–';
+  const t = m.total;
+  const title = id => state.scenarios.find(s => s.id === id)?.title || id;
+  const big = (value, label) => el('div', {class: 'm-stat'}, el('b', {text: value}), el('span', {text: label}));
+  $('measurement').replaceChildren(
+    el('div', {class: 'm-head'}, el('strong', {text: 'Ungefilterte Messung · tractor ohne Auswahl'}),
+      el('span', {class: 'm-meta', text: `alle ${t.docs} Kandidaten, Modell ${m.model || '–'}, Stand ${m.measuredAt}`})),
+    el('div', {class: 'm-stats'},
+      big(`${t.exact} von ${t.docs}`, `Dokumente vollständig richtig (${pct(t.exact, t.docs)})`),
+      big(pct(t.positiveOk, t.positive), `der Felder richtig (${t.positiveOk} von ${t.positive})`),
+      big(pct(t.rejectionOk, t.rejection), `der Ablehnungen richtig (${t.rejectionOk} von ${t.rejection})`)),
+    el('div', {class: 'm-cats'}, Object.entries(m.byCategory).map(([id, b]) =>
+      el('span', {class: 'm-cat'}, `${title(id)} `, el('b', {text: `${b.exact}/${b.docs}`}), ` Dokumente · ${pct(b.positiveOk, b.positive)} Felder`))),
+    el('p', {class: 'm-note', text: 'Die Demos oben zeigen nur die Auswahl, die tractor vollständig löst. Diese Messung zählt auch alle Grenzfälle mit; sie ist die belastbare Zahl.'}));
+  $('measurement').hidden = false;
+  const link = $('measureLink');
+  link.textContent = `ungefiltert: ${pct(t.exact, t.docs)} Dokumente · ${pct(t.positiveOk, t.positive)} Felder`;
+  link.title = 'Messung über alle Kandidaten, nicht nur die Auswahl der Demos';
+  link.hidden = false;
+}
+
 async function health() {
   const pill = $('connection');
   try {
@@ -407,6 +430,7 @@ async function init() {
   $('measure').disabled = !configured;
   $('connection').textContent = configured ? 'Verbindung …' : 'Datenvorschau (TRACTOR_URL fehlt)';
   selectScenario(state.scenarios[0]);
+  api('/api/measurement').then(renderMeasurement).catch(() => {});
   if (configured) health();
 }
 

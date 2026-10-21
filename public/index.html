@@ -14,7 +14,7 @@
   <a class="skip-link" href="#main">Zum Demo-Bereich</a>
   <header class="masthead">
     <div class="brand"><span class="brand-mark" aria-hidden="true"></span><strong>tractor</strong><span class="brand-sub">Text rein, saubere Felder raus</span></div>
-    <span id="connection" class="pill" role="status">Verbindung …</span>
+    <div class="header-pills"><a id="measureLink" class="pill pill-link" href="#measurement" hidden></a><span id="connection" class="pill" role="status">Verbindung …</span></div>
   </header>
   <main id="main">
     <nav class="tabs" id="tabs" aria-label="Demos"></nav>
@@ -23,7 +23,7 @@
     <div class="stage">
       <section class="doc" aria-labelledby="docTitle">
         <h2 id="docTitle">Dokument <span id="caseTitle" class="case-title"></span></h2>
-        <textarea id="text" rows="7" spellcheck="false" aria-label="Quelltext"></textarea>
+        <textarea id="text" rows="14" spellcheck="false" aria-label="Quelltext"></textarea>
         <details class="schema"><summary>Felder und Typen</summary><textarea id="request" rows="10" spellcheck="false" class="mono" aria-label="Anfrage als JSON"></textarea></details>
         <div class="doc-actions">
           <button id="run" class="button button-primary" type="button">Extrahieren</button>
@@ -42,6 +42,7 @@
         <div><h2 id="runTitle">Speed-Run</h2><p class="hint2" id="runHint"></p></div>
         <div class="speedrun-actions"><button id="measure" class="button button-primary" type="button">Speed-Run starten</button><button id="stop" class="button" type="button" hidden>Stoppen</button></div>
       </div>
+      <div id="measurement" class="measurement" hidden></div>
       <p class="note" id="selectionNote"></p>
       <div id="runLanes" class="run-lanes"></div>
       <div id="score" class="score"></div>

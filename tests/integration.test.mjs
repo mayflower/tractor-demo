@@ -139,3 +139,14 @@ test('the LLM lane is capped per minute while tractor stays unlimited', async ()
     for (let i = 0; i < 5; i += 1) assert.equal((await call('tractor')).result.ok, true);
   } finally { app.close(); tractor.close(); }
 });
+
+test('the unfiltered measurement is served and covers every candidate', async () => {
+  const app = createApp(readConfig({}));
+  const base = await start(app);
+  try {
+    const m = await (await fetch(`${base}/api/measurement`)).json();
+    const {scenarios} = await import('../data/scenarios.mjs');
+    assert.equal(m.total.docs, scenarios.reduce((n, s) => n + s.cases.length, 0));
+    assert.ok(m.total.exact < m.total.docs, 'the measurement includes the edge cases, so it is not 100 %');
+  } finally { app.close(); }
+});
