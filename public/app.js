@@ -4,7 +4,7 @@ const $ = id => document.getElementById(id);
 const state = {config: null, scenarios: [], scenario: null, kase: null, status: {}, controller: null, runToken: 0, lanes: {}};
 
 const ISSUES = {
-  not_found: 'nicht gefunden', ambiguous_value: 'mehrdeutig', ambiguous_record: 'mehrere Datensätze',
+  not_found: 'nicht gefunden', ambiguous_value: 'mehrdeutig · alle Kandidaten', ambiguous_record: 'mehrere Datensätze',
   invalid_iban: 'ungültige IBAN', invalid_identifier: 'ungültige Kennung', currency_mismatch: 'Währung passt nicht',
   missing_or_multiple_currency: 'Währung unklar', ambiguous_or_unsupported_date: 'Datum nicht eindeutig',
   missing_unit: 'Einheit fehlt', non_scalar_quantity: 'Bereich oder Näherung', ambiguous_unit: 'Einheit mehrdeutig',
@@ -24,7 +24,15 @@ function el(tag, props = {}, ...children) {
 }
 
 const ms = v => v === null || v === undefined ? '–' : v < 1000 ? `${Math.round(v)} ms` : `${(v / 1000).toFixed(1)} s`;
-const show = v => v === null || v === undefined ? 'null' : typeof v === 'object' ? JSON.stringify(v) : String(v);
+const show = v => v === null || v === undefined ? 'null' : Array.isArray(v) ? v.map(show).join('  |  ') : typeof v === 'object' ? JSON.stringify(v) : String(v);
+/** Competing candidates render as separate amber chips, so they cannot be mistaken for one value or for records. */
+function valueNode(value, {ambiguous = false, cls = 'value'} = {}) {
+  if (Array.isArray(value) && value.length > 1 && ambiguous) {
+    return el('div', {class: `${cls} cands`}, value.map(v => el('span', {class: 'cand', text: show(v)})));
+  }
+  return el('div', {class: `${cls}${value === null || value === undefined ? ' null' : ''}`, text: show(value)});
+}
+const isAmbiguous = (issues, name, index) => issues.some(i => i.code === 'ambiguous_value' && i.field === name && (index === undefined || i.index === undefined || i.index === index));
 const typeLabel = spec => [spec.type, spec.unit, spec.currency, spec.country, spec.format].filter(Boolean).join(' · ');
 
 async function api(path, options) {
@@ -101,14 +109,18 @@ function markEdited() {
 
 function fieldCard(name, spec, value, opts) {
   const {issues = [], entry, llmEntry, llmValue, llmOn, delay} = opts;
-  const classes = ['field', entry ? (entry.ok ? 'ok' : 'miss') : ''].join(' ');
+  const ambiguous = Array.isArray(value) && issues.some(i => i.code === 'ambiguous_value');
+  const classes = ['field', ambiguous ? 'ambiguous' : '', entry ? (entry.ok ? 'ok' : 'miss') : ''].join(' ');
   const card = el('div', {class: classes, style: `animation-delay:${delay}ms`});
   card.append(el('div', {class: 'field-head'}, el('span', {text: spec.description}), el('span', {class: 'type', text: typeLabel(spec)})));
-  card.append(el('div', {class: `value${value === null || value === undefined ? ' null' : ''}`, text: show(value)}));
-  for (const issue of issues) card.append(el('span', {class: `badge ${entry && !entry.ok ? 'miss' : ''}`, title: issue.code, text: ISSUES[issue.code] || issue.code}), ' ');
+  card.append(valueNode(value, {ambiguous}));
+  for (const issue of issues) {
+    const many = issue.code === 'ambiguous_value' && Array.isArray(value) ? `mehrdeutig · ${value.length} Kandidaten, keiner gewählt` : null;
+    card.append(el('span', {class: `badge ${many ? 'amber' : entry && !entry.ok ? 'miss' : ''}`, title: issue.code, text: many ? `⚠ ${many}` : (ISSUES[issue.code] || issue.code)}), ' ');
+  }
   if (entry && !entry.ok) card.append(el('div', {class: 'soll', text: `Soll: ${show(entry.expected)}`}));
   if (llmOn) {
-    card.append(el('div', {class: `llm ${llmEntry ? (llmEntry.ok ? 'ok' : 'miss') : ''}`}, el('span', {}, 'LLM ', el('span', {class: 'mk', text: llmEntry ? (llmEntry.ok ? '✓' : '✗') : ''})), el('span', {class: 'v', text: show(llmValue)})));
+    card.append(el('div', {class: `llm ${llmEntry ? (llmEntry.ok ? 'ok' : 'miss') : ''}`}, el('span', {}, 'LLM ', el('span', {class: 'mk', text: llmEntry ? (llmEntry.ok ? '✓' : '✗') : ''})), el('span', {class: 'v'}, Array.isArray(llmValue) && llmValue.length > 1 ? llmValue.map(v => el('span', {class: 'cand cand-llm', text: show(v)})) : show(llmValue))));
   }
   return card;
 }
@@ -256,10 +268,20 @@ function renderScore(summaries) {
     s.cost !== null && s.cost !== undefined ? ` · ${s.cost.toFixed(5)} ${s.currency}` : '')));
 }
 
-const compactValues = (data, issues) => {
-  const record = Array.isArray(data) ? data.map(r => Object.values(r).map(show).join(' · ')).join('  |  ') : Object.values(data || {}).map(show).join(' · ');
-  return record;
-};
+/** One line of values: competing candidates become chips, records are separated by a bar. */
+function compactValues(data, issues) {
+  const records = Array.isArray(data) ? data : [data || {}];
+  const nodes = [];
+  records.forEach((record, index) => {
+    if (index) nodes.push(el('span', {class: 'rec-sep', text: '┃'}));
+    Object.entries(record).forEach(([name, value], i) => {
+      if (i) nodes.push(' · ');
+      const ambiguous = Array.isArray(value) && isAmbiguous(issues || [], name, Array.isArray(data) ? index : undefined);
+      nodes.push(ambiguous ? el('span', {class: 'cand-group'}, value.map(v => el('span', {class: 'cand', text: show(v)}))) : show(value));
+    });
+  });
+  return nodes;
+}
 
 /** One column per system; every document gets a row that fills in when its result arrives. */
 function makeColumn(key, label, cases) {
@@ -292,8 +314,8 @@ function fillRow(column, event, scale) {
   row.mark.textContent = event.error ? '!' : ok ? '✓' : '✗';
   row.ms = event.error ? null : event.timing.wallMs;
   row.time.textContent = event.error ? 'Fehler' : ms(event.timing.wallMs);
-  row.values.textContent = event.error ? event.error : compactValues(event.data);
-  if (!event.error && event.issues?.length) row.values.append(' ', ...event.issues.map(i => el('span', {class: 'badge', title: i.code, text: ISSUES[i.code] || i.code})));
+  row.values.replaceChildren(...(event.error ? [event.error] : compactValues(event.data, event.issues)));
+  if (!event.error && event.issues?.length) row.values.append(' ', ...event.issues.map(i => el('span', {class: `badge${i.code === 'ambiguous_value' ? ' amber' : ''}`, title: i.code, text: i.code === 'ambiguous_value' ? '⚠ mehrdeutig' : (ISSUES[i.code] || i.code)})));
   column.done += 1;
   rescale(scale);
 }
@@ -371,6 +393,8 @@ async function init() {
   try {
     [state.config, {scenarios: state.scenarios}] = await Promise.all([api('/api/config'), api('/api/scenarios')]);
   } catch (error) { showError(error.message); return; }
+  // The race against the LLM is the default; without a configured LLM the box stays off and disabled.
+  $('compare').checked = state.config.llm.configured;
   if (!state.config.llm.configured) { $('compare').disabled = true; $('compare').parentElement.title = 'LLM_MODEL und LLM_API_KEY nicht konfiguriert'; }
   $('run').addEventListener('click', extract);
   $('text').addEventListener('input', markEdited);

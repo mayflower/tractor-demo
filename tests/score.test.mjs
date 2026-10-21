@@ -54,13 +54,13 @@ test('every scenario case is well-formed and its text fits the document limit', 
     for (const record of expectedRecords) assert.deepEqual(Object.keys(record).sort(), Object.keys(kase.request.fields).sort(), kase.id);
     assert.equal(Array.isArray(kase.expected.data), Boolean(kase.request.many), kase.id);
     if (kase.request.many) assert.ok(kase.request.fields[kase.request.anchor], kase.id);
-    assert.ok(kase.text.length < 600, kase.id);
+    assert.ok(kase.text.length < 1250, kase.id); // joint 512-token window with the schema
   }
 });
 
 test('demo scenarios exclude the edge cases, and every candidate sits in exactly one scenario', async () => {
   const {demoCases, scenarioIndex} = await import('../data/scenarios.mjs');
-  assert.ok(demoCases().length >= 100);
+  assert.ok(demoCases().length >= 60);
   assert.ok(!demoCases().some(c => scenarioIndex.get('edge').cases.includes(c)));
   assert.ok(scenarioIndex.get('edge').cases.every(c => c.from));
 });

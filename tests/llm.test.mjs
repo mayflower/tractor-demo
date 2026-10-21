@@ -13,8 +13,8 @@ test('strict schema lists every field and wraps records', () => {
   const item = schema.properties.records.items;
   assert.deepEqual(item.required, ['name', 'weight', 'iban']);
   assert.equal(item.additionalProperties, false);
-  assert.deepEqual(item.properties.weight.type, ['number', 'null']);
-  assert.deepEqual(item.properties.iban.type, ['string', 'null']);
+  assert.deepEqual(item.properties.weight.anyOf, [{type: 'number'}, {type: 'null'}, {type: 'array', items: {type: 'number'}}]);
+  assert.deepEqual(item.properties.iban.anyOf, [{type: 'string'}, {type: 'null'}, {type: 'array', items: {type: 'string'}}]);
 });
 
 test('prompt carries the typed contract but never an expected value', () => {
@@ -22,6 +22,7 @@ test('prompt carries the typed contract but never an expected value', () => {
   assert.match(user, /Einheit g/);
   assert.match(user, /Prüfziffer/);
   assert.match(user, /Atlas wiegt 3 kg\./);
+  assert.match(buildPrompt(request).system, /Array in Textreihenfolge/);
 });
 
 test('Server-Timing is parsed into stages', () => {

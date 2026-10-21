@@ -79,7 +79,7 @@ test('playground validates the request and forwards it', async () => {
     const post = body => fetch(`${base}/api/extract`, {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(body)});
     assert.equal((await post({request: {text: '', fields: {a: {type: 'text', description: 'x'}}}})).status, 400);
     assert.equal((await post({request: {text: 'x', fields: {'bad key': {}}}})).status, 400);
-    const ok = await (await post({request: {text: 'Breite: 12,5 cm.', fields: {width: {type: 'quantity', description: 'Breite', unit: 'mm'}}}})).json();
+    const ok = await (await post({request: {text: 'Die Breite beträgt 12,5 cm.', fields: {width: {type: 'quantity', description: 'Breite', unit: 'mm'}}}})).json();
     assert.equal(ok.result.ok, true);
   } finally { app.close(); tractor.close(); }
 });
@@ -107,7 +107,10 @@ test('compare mode scores a strict-schema LLM answer on data only and prices its
     const [tractorSummary, llmSummary] = events.at(-1).summaries;
     const n = scenarioIndex.get('rejection').cases.length;
     assert.equal(tractorSummary.exact, n);
-    assert.equal(llmSummary.rejectionOk, n); // all-null answers reject everything
+    // An all-null answer is right exactly for the fields that are expected to be null.
+    const nullFields = scenarioIndex.get('rejection').cases.flatMap(k => (Array.isArray(k.expected.data) ? k.expected.data : [k.expected.data]))
+      .flatMap(rec => Object.values(rec)).filter(v => v === null).length;
+    assert.equal(llmSummary.rejectionOk, nullFields);
     assert.equal(llmSummary.issuesOk, 0);
     assert.equal(llmSummary.inputTokens, n * 100);
     assert.ok(Math.abs(llmSummary.cost - n * (100 * 1 + 10 * 2) / 1e6) < 1e-12);
@@ -125,7 +128,7 @@ test('the LLM lane is capped per minute while tractor stays unlimited', async ()
   const app = createApp(readConfig({TRACTOR_URL: await start(tractor), LLM_MODEL: 'fake', LLM_API_KEY: 'k', LLM_MAX_PER_MINUTE: '2'}), providers);
   const base = await start(app);
   try {
-    const body = lane => JSON.stringify({request: {text: 'Breite: 12,5 cm.', fields: {width: {type: 'quantity', description: 'Breite', unit: 'mm'}}}, lane});
+    const body = lane => JSON.stringify({request: {text: 'Die Breite beträgt 12,5 cm.', fields: {width: {type: 'quantity', description: 'Breite', unit: 'mm'}}}, lane});
     const call = lane => fetch(`${base}/api/extract`, {method: 'POST', headers: {'content-type': 'application/json'}, body: body(lane)}).then(r => r.json());
     assert.equal((await call('llm')).result.ok, true);
     assert.equal((await call('llm')).result.ok, true);

@@ -103,7 +103,7 @@ export function createApp(config = readConfig(), injected) {
         if (!llmConfigured(config.llm)) health.llm = {ok: false, configured: false, message: 'Optional: LLM_MODEL und LLM_API_KEY konfigurieren.'};
         else {
           try {
-            const answer = await providers.llm({...config.llm, request: {text: 'Breite: 12,5 cm.', fields: {width: {type: 'quantity', description: 'Breite', unit: 'mm'}}}, timeoutMs: config.timeoutMs});
+            const answer = await providers.llm({...config.llm, request: {text: 'Die Breite beträgt 12,5 cm.', fields: {width: {type: 'quantity', description: 'Breite', unit: 'mm'}}}, timeoutMs: config.timeoutMs});
             health.llm = {ok: true, configured: true, model: answer.model, message: 'Modell antwortet im erwarteten Format.', latencyMs: answer.timing.wallMs};
           } catch (error) {
             health.llm = {ok: false, configured: true, message: error instanceof ProviderError ? error.message : 'Verbindungstest fehlgeschlagen.'};

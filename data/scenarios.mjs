@@ -13,7 +13,7 @@ const meta = [
   {id: 'invoice', title: 'Rechnungen', subtitle: 'Nummer, Datum, Betrag, IBAN', summary: 'Typisierte Felder: Datum, Geld und Kennungen werden deterministisch geprüft und normalisiert.'},
   {id: 'units', title: 'Mengen und Einheiten', subtitle: 'Umrechnung', summary: 'Gewicht, Länge, Volumen, Temperatur und Druck werden in die Zieleinheit umgerechnet.'},
   {id: 'contacts', title: 'Kontaktdaten', subtitle: 'Personen, Telefon, Adresse', summary: 'Namen bleiben unverändert, Telefonnummern werden international formatiert, Postleitzahlen mit explizitem Land geprüft.'},
-  {id: 'records', title: 'Mehrere Datensätze', subtitle: 'Records mit Anker', summary: 'Ein Anker-Feld trennt ausdrücklich beschriebene Datensätze; gleiche Namen bleiben getrennt.'},
+  {id: 'records', title: 'Mehrere Datensätze', subtitle: 'Records mit Anker', summary: 'Ein Anker-Feld trennt wenige, ausdrücklich beschriebene Datensätze; gleiche Namen bleiben getrennt. Positionslisten sind kein Gegenstand der Demo.'},
   {id: 'rejection', title: 'Ablehnen statt raten', subtitle: 'Ungültig und mehrdeutig', summary: 'Falsche Prüfsummen, widersprüchliche Werte, relative Fristen: null und ein Befund statt einer Vermutung.'},
 ];
 
