@@ -107,56 +107,83 @@ function markEdited() {
 
 /* ---------- result cards ---------- */
 
-function fieldCard(name, spec, value, opts) {
-  const {issues = [], entry, llmEntry, llmValue, llmOn, delay} = opts;
-  const ambiguous = Array.isArray(value) && issues.some(i => i.code === 'ambiguous_value');
-  const classes = ['field', ambiguous ? 'ambiguous' : '', entry ? (entry.ok ? 'ok' : 'miss') : ''].join(' ');
-  const card = el('div', {class: classes, style: `animation-delay:${delay}ms`});
+/** One system (tractor or LLM) as a row. Both systems use the same presentation. */
+function laneRow(lane) {
+  const {label, state: status, value, issues = [], entry, error} = lane;
+  const ambiguous = status === 'done' && Array.isArray(value) && issues.some(i => i.code === 'ambiguous_value');
+  const cls = status === 'pending' ? 'pending' : status === 'error' ? 'miss' : entry ? (entry.ok ? 'ok' : 'miss') : '';
+  const body = status === 'pending' ? el('div', {class: 'value null', text: '…'})
+    : status === 'error' ? el('div', {class: 'value null', text: error})
+    : valueNode(value, {ambiguous});
+  const badges = issues.map(issue => {
+    const many = issue.code === 'ambiguous_value' && Array.isArray(value) ? `⚠ mehrdeutig · ${value.length} Kandidaten, keiner gewählt` : null;
+    return el('span', {class: `badge ${many ? 'amber' : entry && !entry.ok ? 'miss' : ''}`, title: issue.code, text: many || ISSUES[issue.code] || issue.code});
+  });
+  const mark = status === 'done' && entry ? (entry.ok ? '✓' : '✗') : '';
+  return el('div', {class: `lane-row ${cls}`}, el('span', {class: 'lane-tag', text: label}), el('div', {class: 'lane-body'}, body, badges), el('span', {class: 'mk', text: mark}));
+}
+
+/** A field with one row per system. `lanes` is [{label, state: pending|done|error, value, issues, entry, error}]. */
+function fieldCard(name, spec, lanes, delay) {
+  const done = lanes.filter(l => l.state === 'done' && l.entry);
+  const anyMiss = lanes.some(l => l.state === 'error' || (l.entry && !l.entry.ok));
+  const allOk = done.length === lanes.length && done.every(l => l.entry.ok);
+  const ambiguous = lanes.some(l => l.state === 'done' && Array.isArray(l.value) && (l.issues || []).some(i => i.code === 'ambiguous_value'));
+  const card = el('div', {class: ['field', ambiguous ? 'ambiguous' : '', anyMiss ? 'miss' : allOk ? 'ok' : ''].join(' '), style: `animation-delay:${delay}ms`});
   card.append(el('div', {class: 'field-head'}, el('span', {text: spec.description}), el('span', {class: 'type', text: typeLabel(spec)})));
-  card.append(valueNode(value, {ambiguous}));
-  for (const issue of issues) {
-    const many = issue.code === 'ambiguous_value' && Array.isArray(value) ? `mehrdeutig · ${value.length} Kandidaten, keiner gewählt` : null;
-    card.append(el('span', {class: `badge ${many ? 'amber' : entry && !entry.ok ? 'miss' : ''}`, title: issue.code, text: many ? `⚠ ${many}` : (ISSUES[issue.code] || issue.code)}), ' ');
-  }
-  if (entry && !entry.ok) card.append(el('div', {class: 'soll', text: `Soll: ${show(entry.expected)}`}));
-  if (llmOn) {
-    card.append(el('div', {class: `llm ${llmEntry ? (llmEntry.ok ? 'ok' : 'miss') : ''}`}, el('span', {}, 'LLM ', el('span', {class: 'mk', text: llmEntry ? (llmEntry.ok ? '✓' : '✗') : ''})), el('span', {class: 'v'}, Array.isArray(llmValue) && llmValue.length > 1 ? llmValue.map(v => el('span', {class: 'cand cand-llm', text: show(v)})) : show(llmValue))));
-  }
+  card.append(...lanes.map(laneRow));
+  const miss = done.find(l => !l.entry.ok);
+  if (miss) card.append(el('div', {class: 'soll', text: `Soll: ${show(miss.entry.expected)}`}));
   return card;
 }
 
-function renderResult(request, t, l) {
+const pendingLanes = compare => [{label: 'tractor', state: 'pending'}, ...(compare ? [{label: 'LLM', state: 'pending'}] : [])];
+
+/** Draws every field with the lanes that already answered; the others stay pending until their result arrives. */
+function renderResult(request, t, l, compare) {
   const box = $('result');
-  if (!t) return;
-  if (!t.ok) { box.replaceChildren(el('p', {class: 'placeholder', text: t.error})); return; }
+  const systems = [{label: 'tractor', res: t, scored: true}, ...(compare ? [{label: 'LLM', res: l, scored: false}] : [])];
+  const reference = t?.ok ? t : l?.ok ? l : null;
+  if (!reference) {
+    const failed = systems.filter(x => x.res && !x.res.ok);
+    if (failed.length === systems.length) { box.replaceChildren(...failed.map(x => el('p', {class: 'placeholder', text: `${x.label}: ${x.res.error}`}))); return; }
+    renderPreview();
+    return;
+  }
   const many = Boolean(request.many);
-  const records = many ? t.data : [t.data];
-  const llmRecords = l?.ok ? (many ? l.data : [l.data]) : [];
+  const recordsOf = res => (many ? (Array.isArray(res.data) ? res.data : []) : [res.data]);
+  const records = recordsOf(reference);
   const nodes = [];
   let delay = 0;
   if (many && !records.length) nodes.push(el('p', {class: 'placeholder', text: 'Keine Datensätze gefunden.'}));
-  records.forEach((record, index) => {
+  records.forEach((_, index) => {
     const group = many ? el('div', {class: 'record'}, el('h3', {text: `Datensatz ${index + 1}`})) : box;
     const cards = Object.entries(request.fields).map(([name, spec]) => {
-      const issues = t.issues.filter(i => i.field === name && (many ? i.index === index : true));
-      const entry = t.score?.fields.find(f => f.field === name && f.index === (many ? index : null));
-      const llmEntry = l?.score?.fields.find(f => f.field === name && f.index === (many ? index : null));
-      return fieldCard(name, spec, record?.[name], {issues, entry, llmEntry, llmValue: llmRecords[index]?.[name], llmOn: Boolean(l?.ok), delay: (delay += 45)});
+      const lanes = systems.map(({label, res}) => {
+        if (!res) return {label, state: 'pending'};
+        if (!res.ok) return {label, state: 'error', error: res.error};
+        return {
+          label, state: 'done', value: recordsOf(res)[index]?.[name],
+          issues: (res.issues || []).filter(i => i.field === name && (many ? i.index === index : true)),
+          entry: res.score?.fields.find(f => f.field === name && f.index === (many ? index : null)),
+        };
+      });
+      return fieldCard(name, spec, lanes, (delay += 45));
     });
     if (many) { group.append(...cards); nodes.push(group); } else nodes.push(...cards);
   });
-  const recordIssues = t.issues.filter(i => !i.field);
+  const recordIssues = (t?.issues || []).filter(i => !i.field);
   if (recordIssues.length) nodes.push(el('p', {class: 'placeholder'}, recordIssues.map(i => el('span', {class: 'badge', text: ISSUES[i.code] || i.code}))));
-  if (t.score?.extraRecords) nodes.push(el('p', {class: 'placeholder', text: `${t.score.extraRecords} Datensatz zu viel`}));
-  if (l && !l.ok) nodes.push(el('p', {class: 'placeholder', text: `LLM: ${l.error}`}));
+  if (t?.score?.extraRecords) nodes.push(el('p', {class: 'placeholder', text: `${t.score.extraRecords} Datensatz zu viel`}));
   box.replaceChildren(...nodes);
 }
 
-/** Before anything runs: the typed fields the request asks for. */
+/** Before anything runs: the typed fields the request asks for, every system still pending. */
 function renderPreview() {
   let request;
   try { request = JSON.parse($('request').value); } catch { return; }
-  $('result').replaceChildren(...Object.entries(request.fields || {}).map(([name, spec]) => fieldCard(name, spec, '…', {delay: 0})).map(c => { c.classList.add('pending'); return c; }));
+  const compare = $('compare').checked;
+  $('result').replaceChildren(...Object.entries(request.fields || {}).map(([name, spec]) => fieldCard(name, spec, pendingLanes(compare), 0)));
 }
 
 /* ---------- speed: live lanes ---------- */
@@ -249,7 +276,7 @@ async function extract() {
         lane.node.append(...stageBlock(result.timing));
         if (state.kase && result.score) { state.status[state.kase.id] = result.score.exact ? 'ok' : 'miss'; renderChips(); }
       }
-      renderResult(request, results.tractor, results.llm);
+      renderResult(request, results.tractor, results.llm, compare);
       showSpeedup();
     } catch (error) {
       if (token === state.runToken) { lane.finish(performance.now() - lane.startedAt); showError(error.message); }
