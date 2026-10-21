@@ -26,6 +26,7 @@ function el(tag, props = {}, ...children) {
 const ms = v => v === null || v === undefined ? '–' : v < 1000 ? `${Math.round(v)} ms` : `${(v / 1000).toFixed(1)} s`;
 const show = v => v === null || v === undefined ? 'null' : Array.isArray(v) ? v.map(show).join('  |  ') : typeof v === 'object' ? JSON.stringify(v) : String(v);
 /** Competing candidates render as separate amber chips, so they cannot be mistaken for one value or for records. */
+const isCandidateList = (value, spec) => Array.isArray(value) && value.length > 1 && spec?.type !== 'list';
 function valueNode(value, {ambiguous = false, cls = 'value'} = {}) {
   if (Array.isArray(value) && value.length > 1 && ambiguous) {
     return el('div', {class: `${cls} cands`}, value.map(v => el('span', {class: 'cand', text: show(v)})));
@@ -108,17 +109,20 @@ function markEdited() {
 /* ---------- result cards ---------- */
 
 /** One system (tractor or LLM) as a row. Both systems use the same presentation. */
-function laneRow(lane) {
+function laneRow(lane, spec) {
   const {label, state: status, value, issues = [], entry, error} = lane;
-  const ambiguous = status === 'done' && Array.isArray(value) && issues.some(i => i.code === 'ambiguous_value');
+  // Several candidates for a single value look the same for both systems, whether or not an issue code reports it.
+  const ambiguous = status === 'done' && isCandidateList(value, spec);
   const cls = status === 'pending' ? 'pending' : status === 'error' ? 'miss' : entry ? (entry.ok ? 'ok' : 'miss') : '';
   const body = status === 'pending' ? el('div', {class: 'value null', text: '…'})
     : status === 'error' ? el('div', {class: 'value null', text: error})
     : valueNode(value, {ambiguous});
+  const candidates = ambiguous ? `⚠ mehrdeutig · ${value.length} Kandidaten, keiner gewählt` : null;
   const badges = issues.map(issue => {
-    const many = issue.code === 'ambiguous_value' && Array.isArray(value) ? `⚠ mehrdeutig · ${value.length} Kandidaten, keiner gewählt` : null;
+    const many = issue.code === 'ambiguous_value' && ambiguous ? candidates : null;
     return el('span', {class: `badge ${many ? 'amber' : entry && !entry.ok ? 'miss' : ''}`, title: issue.code, text: many || ISSUES[issue.code] || issue.code});
   });
+  if (ambiguous && !issues.some(i => i.code === 'ambiguous_value')) badges.push(el('span', {class: 'badge amber', text: candidates}));
   const mark = status === 'done' && entry ? (entry.ok ? '✓' : '✗') : '';
   return el('div', {class: `lane-row ${cls}`}, el('span', {class: 'lane-tag', text: label}), el('div', {class: 'lane-body'}, body, badges), el('span', {class: 'mk', text: mark}));
 }
@@ -128,10 +132,10 @@ function fieldCard(name, spec, lanes, delay) {
   const done = lanes.filter(l => l.state === 'done' && l.entry);
   const anyMiss = lanes.some(l => l.state === 'error' || (l.entry && !l.entry.ok));
   const allOk = done.length === lanes.length && done.every(l => l.entry.ok);
-  const ambiguous = lanes.some(l => l.state === 'done' && Array.isArray(l.value) && (l.issues || []).some(i => i.code === 'ambiguous_value'));
+  const ambiguous = lanes.some(l => l.state === 'done' && isCandidateList(l.value, spec));
   const card = el('div', {class: ['field', ambiguous ? 'ambiguous' : '', anyMiss ? 'miss' : allOk ? 'ok' : ''].join(' '), style: `animation-delay:${delay}ms`});
   card.append(el('div', {class: 'field-head'}, el('span', {text: spec.description}), el('span', {class: 'type', text: typeLabel(spec)})));
-  card.append(...lanes.map(laneRow));
+  card.append(...lanes.map(lane => laneRow(lane, spec)));
   const miss = done.find(l => !l.entry.ok);
   if (miss) card.append(el('div', {class: 'soll', text: `Soll: ${show(miss.entry.expected)}`}));
   return card;
