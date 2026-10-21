@@ -86,11 +86,6 @@ export function createApp(config = readConfig(), injected) {
     try {
       if (path.startsWith('/api/') && !requestAllowed(req)) return json(res, 403, {error: 'Die API ist nur aus derselben Webanwendung aufrufbar.'});
       if (req.method === 'GET' && path === '/api/config') return json(res, 200, publicConfig(config));
-      if (req.method === 'GET' && path === '/api/measurement') {
-        // Static, reproducible measurement of every candidate (scripts/measure-pool.mjs); absent until it was run.
-        try { return json(res, 200, JSON.parse(await readFile(new URL('./data/measurement.json', import.meta.url)))); }
-        catch { return json(res, 404, {error: 'Keine Messung vorhanden.'}); }
-      }
       if (req.method === 'GET' && path === '/api/scenarios') return json(res, 200, {scenarios: publicScenarios(), synthetic: true});
       if (req.method === 'GET' && path === '/api/health') {
         const health = {};
