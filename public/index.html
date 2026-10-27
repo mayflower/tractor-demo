@@ -17,6 +17,23 @@
     <span id="connection" class="pill" role="status">Verbindung …</span>
   </header>
   <main id="main">
+    <section class="speedrun" id="speedrun" aria-labelledby="runTitle">
+      <div class="speedrun-head">
+        <div><h1 id="runTitle">Speed-Run</h1><p class="hint2" id="runHint"></p></div>
+        <div class="speedrun-toolbar">
+          <label class="check"><input id="compare" type="checkbox"><span>gegen LLM antreten</span></label>
+          <div class="speedrun-actions"><button id="measure" class="button button-primary" type="button">Speed-Run starten</button><button id="stop" class="button" type="button" hidden>Stoppen</button></div>
+        </div>
+      </div>
+      <div id="runError" class="banner" role="alert" hidden></div>
+      <div id="runLanes" class="run-columns"></div>
+      <div id="score" class="score" aria-live="polite"></div>
+      <p class="note" id="selectionNote"></p>
+    </section>
+    <div class="section-head">
+      <div><h2>Einzelnes Dokument prüfen</h2><p class="hint2">Beispiel auswählen, Text und Request anpassen, Ergebnis vergleichen.</p></div>
+      <a href="#speedrun">Zum Speed-Run ↑</a>
+    </div>
     <nav class="tabs" id="tabs" aria-label="Demos"></nav>
     <div class="chips" id="chips" aria-label="Beispiele"></div>
     <section class="race" id="race" aria-label="Geschwindigkeit" aria-live="polite"></section>
@@ -28,7 +45,6 @@
         <textarea id="request" rows="14" spellcheck="false" class="mono" aria-label="Tractor-Request als JSON"></textarea>
         <div class="doc-actions">
           <button id="run" class="button button-primary" type="button">Extrahieren</button>
-          <label class="check"><input id="compare" type="checkbox"><span>gegen LLM antreten</span></label>
           <span id="edited" class="hint" hidden>Eigene Fassung, kein Sollwert</span>
         </div>
         <div id="error" class="banner" role="alert" hidden></div>
@@ -38,15 +54,6 @@
         <div id="result" class="fields"><p class="placeholder">Wähle ein Beispiel oder tippe einen eigenen Text.</p></div>
       </section>
     </div>
-    <section class="speedrun" aria-label="Speed-Run">
-      <div class="speedrun-head">
-        <div><h2 id="runTitle">Speed-Run</h2><p class="hint2" id="runHint"></p></div>
-        <div class="speedrun-actions"><button id="measure" class="button button-primary" type="button">Speed-Run starten</button><button id="stop" class="button" type="button" hidden>Stoppen</button></div>
-      </div>
-      <p class="note" id="selectionNote"></p>
-      <div id="runLanes" class="run-lanes"></div>
-      <div id="score" class="score"></div>
-    </section>
   </main>
 </body>
 </html>

@@ -1,7 +1,7 @@
 'use strict';
 
 const $ = id => document.getElementById(id);
-const state = {config: null, scenarios: [], scenario: null, kase: null, status: {}, controller: null, runToken: 0, lanes: {}};
+const state = {config: null, scenarios: [], scenario: null, kase: null, status: {}, controller: null, runToken: 0, lanes: {}, runResults: false};
 
 const ISSUES = {
   not_found: 'nicht gefunden', ambiguous_value: 'mehrdeutig · alle Kandidaten', ambiguous_record: 'mehrere Datensätze',
@@ -44,6 +44,7 @@ async function api(path, options) {
 }
 
 function showError(message) { $('error').hidden = !message; $('error').textContent = message || ''; }
+function showRunError(message) { $('runError').hidden = !message; $('runError').textContent = message || ''; }
 
 /* ---------- navigation ---------- */
 
@@ -75,12 +76,18 @@ function renderRunHeader() {
   $('selectionNote').textContent = edge
     ? 'Hier scheitert tractor in dieser Prüfung. Die Erwartungen wurden nicht an die Ausgabe angepasst.'
     : `Die fünf Demos zeigen Fälle, die tractor löst; die übrigen Kandidaten stehen unter „Grenzfälle“. Das ist eine Auswahl, keine Genauigkeitsmessung.`;
+  renderRunPreview();
 }
 
 function selectScenario(scenario) {
+  const runSelectionChanged = !state.scenario || (state.scenario.id === 'edge') !== (scenario.id === 'edge');
   state.scenario = scenario;
   state.status = {};
-  $('score').replaceChildren();
+  if (runSelectionChanged) {
+    state.runResults = false;
+    $('score').replaceChildren();
+    showRunError('');
+  }
   renderTabs();
   renderRunHeader();
   selectCase(scenario.cases[0], true);
@@ -292,6 +299,17 @@ async function extract() {
 
 /* ---------- Speed-Run over every demo document ---------- */
 
+function renderRunPreview() {
+  if (state.controller || state.runResults) return;
+  const count = state.scenario.id === 'edge' ? state.scenario.cases.length : demoCases().length;
+  const compare = $('compare').checked;
+  $('runLanes').className = `run-columns${compare ? ' two' : ''}`;
+  $('runLanes').replaceChildren(...['tractor', ...(compare ? ['LLM'] : [])].map(label =>
+    el('section', {class: 'column'},
+      el('header', {}, el('h3', {text: label}), el('span', {class: 'count', text: `${count} Dokumente`})),
+      el('div', {class: 'run-idle'}, el('span', {class: 'clock', text: '–'}), el('p', {text: 'Bereit für den Speed-Run'})))));
+}
+
 function renderScore(summaries) {
   $('score').replaceChildren(...summaries.map(s => el('div', {class: 'score-line'},
     `${s.lane === 'llm' ? 'LLM' : 'tractor'}: `, el('b', {text: `${s.exact}/${s.cases}`}), ' Dokumente exakt · Felder ', el('b', {text: `${s.positiveOk}/${s.positive}`}),
@@ -362,12 +380,13 @@ async function measure() {
   const cases = edge ? state.scenario.cases : demoCases();
   const compare = $('compare').checked;
   state.controller = new AbortController();
+  state.runResults = true;
   state.status = {};
   renderChips();
   $('measure').hidden = true;
   $('stop').hidden = false;
   $('score').replaceChildren();
-  showError('');
+  showRunError('');
   const columns = {tractor: makeColumn('tractor', 'tractor', cases)};
   if (compare) columns.llm = makeColumn('llm', 'LLM', cases);
   const all = Object.values(columns);
@@ -401,7 +420,7 @@ async function measure() {
       }
     }
   } catch (error) {
-    if (error.name !== 'AbortError') showError(error.message);
+    if (error.name !== 'AbortError') showRunError(error.message);
   } finally {
     state.controller = null;
     for (const c of all) c.update(performance.now());
@@ -423,7 +442,7 @@ async function health() {
 async function init() {
   try {
     [state.config, {scenarios: state.scenarios}] = await Promise.all([api('/api/config'), api('/api/scenarios')]);
-  } catch (error) { showError(error.message); return; }
+  } catch (error) { showError(error.message); showRunError(error.message); return; }
   // The race against the LLM is the default; without a configured LLM the box stays off and disabled.
   $('compare').checked = state.config.llm.configured;
   if (!state.config.llm.configured) { $('compare').disabled = true; $('compare').parentElement.title = 'LLM_MODEL und LLM_API_KEY nicht konfiguriert'; }
@@ -432,6 +451,7 @@ async function init() {
   $('request').addEventListener('input', markEdited);
   $('text').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) extract(); });
   $('measure').addEventListener('click', measure);
+  $('compare').addEventListener('change', () => { renderRunPreview(); renderPreview(); });
   $('stop').addEventListener('click', () => state.controller?.abort());
   const configured = state.config.tractor.configured;
   $('run').disabled = !configured;
