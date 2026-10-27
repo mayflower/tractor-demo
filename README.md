@@ -31,7 +31,7 @@ Es gibt 118 Kandidaten: Rechnungen, Einheiten, Kontakte, Datensätze und Ablehnu
 
 ## Wie bewertet wird
 
-- Verglichen werden finale Feldwerte, Zahlen nach Wert, Text exakt. Geprüfte Alternativen (`accept`) liegen nur in `data/scenarios.mjs`, nie in der Inferenz.
+- Verglichen werden finale Feldwerte, Zahlen nach Wert, Text exakt. Mengenfelder (`quantity`) erlauben für beide Systeme 0,01 % relative Abweichung, damit gerundete Einheitenumrechnungen wie `31.4961` statt `31.496062992125985` als korrekt gelten. Für andere Zahlen, insbesondere Geldbeträge, bleibt der Vergleich bis auf numerische Rechenungenauigkeit streng. Geprüfte Alternativen (`accept`) liegen nur in den Falldaten, nie in der Inferenz.
 - **Positive Felder** und **korrekte Ablehnungen** (erwartet `null`) werden getrennt gezählt. Bei tractor muss zusätzlich der erwartete Befundcode stimmen; das LLM liefert keine Befunde und wird nur an den Daten gemessen.
 - Ein fehlgeschlagener Aufruf zählt als falsch, auch bei erwarteter Ablehnung.
 - Die Trefferquote ist **keine Benchmarkzahl** und sagt nichts über Realdaten.

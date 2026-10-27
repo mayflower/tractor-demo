@@ -10,6 +10,45 @@ test('numbers compare by value, strings exactly', () => {
   assert.ok(sameValue(null, null) && !sameValue(null, 0));
 });
 
+test('hospital bed accepts rounded conversions for both systems but still requires rejection of the weight limit', () => {
+  const kase = scenarios.flatMap(s => s.cases).find(k => k.id === 'unit-44');
+  const data = {work_height: 31.4961, bed_length: 6.88976, mattress: 120, capacity: null, lowering: 0.072};
+  assert.ok(scoreCase(kase, data, null).exact);
+  assert.ok(scoreCase(kase, data, kase.expected.issues).exact);
+
+  const screenshot = scoreCase(kase, {...data, capacity: 440.925}, null);
+  assert.deepEqual(screenshot.fields.filter(f => !f.ok).map(f => f.field), ['capacity']);
+  assert.ok(!screenshot.exact);
+});
+
+test('quantity tolerance accepts useful rounding and rejects incorrect values across scales', () => {
+  const kase = value => ({request: {fields: {q: {type: 'quantity'}}}, expected: {data: {q: value}, issues: []}});
+  for (const [actual, expected] of [[31.496, 31.496062992125985], [6.89, 6.889763779527559], [10.0009, 10], [-40.001, -40], [1.00005e-12, 1e-12], [0, 0]]) {
+    assert.ok(scoreCase(kase(expected), {q: actual}, null).exact, `${actual} ≈ ${expected}`);
+  }
+  for (const [actual, expected] of [[31.5, 31.496062992125985], [6.88, 6.889763779527559], [10.0011, 10], [80, 31.496062992125985], [0, 1e-12], [1e-12, 0], [-1, 1], ['6.89', 6.889763779527559], [NaN, 1], [Infinity, 1]]) {
+    assert.ok(!scoreCase(kase(expected), {q: actual}, null).exact, `${actual} ≠ ${expected}`);
+  }
+});
+
+test('rounding tolerance does not relax money or other numeric fields', () => {
+  for (const type of ['money', 'number', 'percent']) {
+    const kase = {request: {fields: {n: {type}}}, expected: {data: {n: 12345.67}, issues: []}};
+    assert.ok(!scoreCase(kase, {n: 12345.68}, null).dataOk, type);
+    assert.ok(scoreCase(kase, {n: 12345.67}, null).dataOk, type);
+  }
+});
+
+test('quantity rounding applies to records, candidate arrays and accepted alternatives', () => {
+  const kase = {
+    request: {many: true, fields: {q: {type: 'quantity'}}},
+    expected: {data: [{q: [31.496062992125985, 6.889763779527559]}, {q: 31.496062992125985}], issues: []},
+    accept: {q: [6.889763779527559]},
+  };
+  assert.ok(scoreCase(kase, [{q: [31.4961, 6.88976]}, {q: 6.88976}], null).exact);
+  assert.ok(!scoreCase(kase, [{q: [31.51, 6.88976]}, {q: 6.88976}], null).dataOk);
+});
+
 test('accepted alternatives count, unlisted variants do not', () => {
   const kase = {expected: {data: {p: 'Dr. Anna Weber'}, issues: []}, accept: {p: ['Anna Weber']}};
   assert.ok(scoreCase(kase, {p: 'Anna Weber'}, []).dataOk);
